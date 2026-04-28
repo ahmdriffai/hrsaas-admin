@@ -1,0 +1,37 @@
+import { Option } from "@/components/ui/select/select";
+
+export const religion: Option[] = [
+  { value: "Islam", label: "Islam" },
+  { value: "Hindu", label: "Hindu" },
+  { value: "Budha", label: "Budha" },
+  { value: "Kristen", label: "Kristen" },
+  { value: "Konghuchu", label: "Konghuchu" },
+];
+
+export const blood_type: Option[] = [
+  { value: "A", label: "A" },
+  { value: "B", label: "B" },
+  { value: "AB", label: "AB" },
+  { value: "O", label: "O" },
+  { value: "O+", label: "O+" },
+];
+
+export const maritalStatus: Option[] = [
+  { value: "BK", label: "BK" },
+  { value: "K1", label: "K1" },
+  { value: "K2", label: "K2" },
+  { value: "TK1", label: "TK1" },
+  { value: "TK2", label: "TK2" },
+];
+
+export const sanctionLevel: number[] = [1, 2, 3];
+
+export const days = [
+  "Senin",
+  "Selasa",
+  "Rabu",
+  "Kamis",
+  "Jumat",
+  "Sabtu",
+  "Minggu",
+];

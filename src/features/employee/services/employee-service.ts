@@ -1,0 +1,55 @@
+import { api } from "@/lib/axios";
+import { PaginatedData, ResponseData } from "@/lib/response";
+
+import { formatDate } from "@/lib/utils";
+import {
+  CreateEmployee,
+  Employee,
+  EmployeeSchema,
+  SearchEmployeeRequest,
+} from "../schemas/employee-schema";
+
+export const getEmployees = async (
+  search: SearchEmployeeRequest,
+): Promise<PaginatedData<Employee>> => {
+  const response = await api.get("/employees", {
+    params: {
+      key: search.key,
+      type: search.type,
+      page: search.page,
+      size: search.size,
+    },
+  });
+
+  console.log(response);
+
+  const employees = response.data.data; // Validate the response data against the schema
+  return { ...response.data, data: employees }; // Return the validated data
+};
+
+export const createEmployee = async (
+  request: CreateEmployee,
+): Promise<ResponseData<Employee>> => {
+  const response = await api.post("/employees", {
+    ...request,
+    birth_date: formatDate(new Date(request.birth_date)),
+  });
+
+  console.log(response.data.data);
+  if (response.status !== 200) {
+    throw new Error(response.data.error || "failed to create employee");
+  }
+
+  const employee = EmployeeSchema.parse(response.data.data); // Validate the response data against the schema
+
+  return { ...response.data, data: employee }; // Return the validated data
+};
+
+export const getEmployeeById = async (
+  id: string,
+): Promise<ResponseData<Employee>> => {
+  const response = await api.get(`/employees/${id}`);
+
+  const employees = EmployeeSchema.parse(response.data.data); // Validate the response data against the schema
+  return { ...response.data, data: employees }; // Return the validated data
+};
