@@ -14,6 +14,7 @@ import { SearchEmployeeRequest } from "../schemas/employee-schema";
 interface Props {
   search: SearchEmployeeRequest;
 }
+
 export default function ListEmployee({ search }: Props): React.ReactNode {
   const router = useRouter();
 
