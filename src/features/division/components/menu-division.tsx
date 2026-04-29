@@ -1,12 +1,13 @@
 "use client";
 import Button from "@/components/ui/button/button";
 import SearchForm from "@/components/ui/search-form/search-form";
-import { Download, File, PlusCircle } from "lucide-react";
+import { Download } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FormDivision } from "./form-position";
 
-export default function MenuEmployee(): React.ReactNode {
+export default function MenuDivision(): React.ReactNode {
   const [key, setKey] = useState<string>("");
   const router = useRouter();
 
@@ -24,17 +25,8 @@ export default function MenuEmployee(): React.ReactNode {
           setKey={(e) => setKey(e)}
         />
       </div>
-      <div className="mt-3 flex gap-3 ">
-        <Link href="/employees/create">
-          <Button variant="secondary" prefixIcon={<PlusCircle size={18} />}>
-            Tambah
-          </Button>
-        </Link>
-        <Link href="/employees/create">
-          <Button variant="outline" prefixIcon={<File size={18} />}>
-            Import data
-          </Button>
-        </Link>
+      <div className="flex gap-3 items-center justify-center ">
+        <FormDivision />
         <Link href="/employees/create">
           <Button variant="outline" prefixIcon={<Download size={18} />}>
             Download
