@@ -17,7 +17,7 @@ export const AuthSchema = z.object({
 
 export const SignInRequestSchema = z.object({
   email: z.string().email("Email tidak valid"),
-  password: z.string().min(6, "Minimal 6 karakter"),
+  password: z.string().min(4, "Minimal 4 karakter"),
 });
 
 export type User = z.infer<typeof UserSchema>;

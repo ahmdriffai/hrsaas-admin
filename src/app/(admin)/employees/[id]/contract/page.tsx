@@ -1,9 +1,15 @@
-import React from "react";
+import JobEmployee from "@/features/employee/components/detail/job-employee";
+type Props = {
+  params: Promise<{
+    id: string;
+  }>;
+};
 
-export default function EmployeeContract(): React.ReactNode {
+export default async function DetailEmployeePage({ params }: Props) {
+  const { id } = await params;
   return (
     <div>
-      <p>Employee Kontrak</p>
+      <JobEmployee id={id} />
     </div>
   );
 }

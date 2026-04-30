@@ -3,22 +3,23 @@
 import { Pagination } from "@/components/shared/pagination/pagination";
 import Button from "@/components/ui/button/button";
 import Table from "@/components/ui/table/table";
-import { BadgeCheck, FileText } from "lucide-react";
 import Link from "next/link";
 
 import { PageSelector } from "@/components/shared/page-selector/page-selector";
+import Badge from "@/components/ui/badge/badge";
+import toIDDate from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useGetEmployees } from "../hooks/use-get-employee";
-import { SearchEmployeeRequest } from "../schemas/employee-schema";
+import { useSearchTimeOffReq } from "../hooks/use-search-timeoff";
+import { SearchTimeOffRequest } from "../schemas/time-off-schema";
 
 interface Props {
-  search: SearchEmployeeRequest;
+  search: SearchTimeOffRequest;
 }
 
-export default function ListEmployee({ search }: Props): React.ReactNode {
+export default function ListTimeOffRequest({ search }: Props): React.ReactNode {
   const router = useRouter();
 
-  const { data, isLoading, isFetching } = useGetEmployees(search);
+  const { data, isLoading, isFetching } = useSearchTimeOffReq(search);
 
   const handlePaginate = (number: number) => {
     const params = new URLSearchParams(window.location.search);
@@ -46,32 +47,64 @@ export default function ListEmployee({ search }: Props): React.ReactNode {
         keyExtractor={(row) => row.id}
         columns={[
           {
-            header: "Name",
+            header: "Karyawan",
             accessor: (row) => (
               <div className="flex items-center justify-start gap-3 min-w-50">
                 <div className="h-9 w-9 rounded-full bg-gray-200 flex justify-center items-center">
-                  {row.fullname.charAt(0).toUpperCase()}
+                  {row.employee.fullname.charAt(0).toUpperCase()}
                 </div>
-                <span className="font-medium ">{row.fullname}</span>
-                <span>
-                  <BadgeCheck size={15} color="green" />
-                </span>
+                <div className="flex flex-col">
+                  <span className="font-medium ">{row.employee.fullname}</span>
+                  <span className="text-xs font-light text-zinc-400">
+                    {row.employee.contract.position.name} -
+                    {row.employee.contract.division.name}
+                  </span>
+                </div>
               </div>
             ),
           },
           {
-            header: "Identitas",
-            accessor: "employee_number",
+            header: "Tgl Mulai",
+            accessor: (row) => (
+              <div>
+                <p>{toIDDate(new Date(row.start_date))}</p>
+              </div>
+            ),
           },
-
           {
-            header: "Dokumen",
-            accessor: () => (
-              <Button variant="ghost">
-                <Link href="/employee/files">
-                  <FileText strokeWidth={1.25} size={20} />
-                </Link>
-              </Button>
+            header: "Tgl Ahir",
+            accessor: (row) => (
+              <div>
+                <p>{toIDDate(new Date(row.end_date))}</p>
+              </div>
+            ),
+          },
+          {
+            header: "Total Hari",
+            accessor: (row) => (
+              <div>
+                <p>{row.requested_days} hari</p>
+              </div>
+            ),
+          },
+          {
+            header: "Jenis Cuti",
+            accessor: (row) => (
+              <div>
+                <p className="font-medium">{row.time_off_type.name} </p>
+              </div>
+            ),
+          },
+          {
+            header: "Status",
+            accessor: (row) => (
+              <Badge
+                variant={
+                  row.request_status === "PENDING" ? "warning" : "success"
+                }
+              >
+                {row.request_status}
+              </Badge>
             ),
           },
 

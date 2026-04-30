@@ -9,9 +9,9 @@ export type Option = {
 
 type Props = {
   label: string;
-  value: string;
+  value?: string;
   options: Option[];
-  onChange: (val: string) => void;
+  onChange?: (val: string) => void;
   className?: string;
   disabled?: boolean;
   error?: string; // 🔥 tambah ini
@@ -37,12 +37,12 @@ export default function Select({
         <select
           disabled={disabled}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={onChange ? (e) => onChange(e.target.value) : undefined}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className={clsx(
             "text-md w-full appearance-none rounded-xl border bg-white px-4 pt-6 pb-2 transition-all outline-none",
-            disabled && "bg-gray-200 cursor-not-allowed",
+            disabled && "disabled:bg-gray-100 cursor-not-allowed",
             error
               ? "border-red-500"
               : isFocused

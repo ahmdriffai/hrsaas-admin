@@ -15,7 +15,7 @@ export function Pagination({
   onPageChange,
   maxVisible = 3,
 }: PaginationServerProps) {
-  const { total_page } = paging;
+  const total_page = paging?.total_page;
   const page = currentPage;
 
   if (total_page <= 1) return null;

@@ -2,10 +2,8 @@ import Title from "@/components/ui/title/title";
 import ListEmployee from "@/features/employee/components/list-employee";
 import MenuEmployee from "@/features/employee/components/menu-employee";
 import { SearchEmployeeRequest } from "@/features/employee/schemas/employee-schema";
-import { api } from "@/lib/axios";
 import { getQueryclient } from "@/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { cookies } from "next/headers";
 
 type Props = {
   searchParams: Promise<{
@@ -29,23 +27,14 @@ export default async function EmployeePage({
   };
 
   const queryClient = getQueryclient();
-  const cookieStore = cookies();
+
   await queryClient.prefetchQuery({
     queryKey: ["employees", search.key, search.page, search.size],
     queryFn: async () => {
-      const response = await api.get("/employees", {
-        params: {
-          key: search.key,
-          type: search.type,
-          page: search.page,
-          size: search.size,
-        },
-        headers: {
-          Cookie: cookieStore.toString(),
-        },
-      });
-
-      return response.data.data;
+      const res = await fetch(
+        `/api/employees?key=${search.key}&page=${search.page}&size=${search.size}`,
+      );
+      return res.json();
     },
   });
 
