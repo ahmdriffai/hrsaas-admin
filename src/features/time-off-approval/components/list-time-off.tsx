@@ -1,25 +1,28 @@
 "use client";
 
 import { Pagination } from "@/components/shared/pagination/pagination";
-import Button from "@/components/ui/button/button";
 import Table from "@/components/ui/table/table";
 
 import { PageSelector } from "@/components/shared/page-selector/page-selector";
 import Badge from "@/components/ui/badge/badge";
+import Button from "@/components/ui/button/button";
 import toIDDate from "@/lib/utils";
-import { Check, Printer } from "lucide-react";
+import { Info, Printer } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useSearchTimeOffReq } from "../hooks/use-search-timeoffreq";
-import { SearchTimeOffRequest } from "../schemas/time-off-schema";
+import { useSearchTimeOffAppr } from "../hooks/use-search-timeoffappr";
+import { SearchTimeOffApproval } from "../schemas/time-off-approval-schema";
+import ActionTimeOffAppr from "./action-time-offappr";
 
 interface Props {
-  search: SearchTimeOffRequest;
+  search: SearchTimeOffApproval;
 }
 
-export default function ListTimeOffRequest({ search }: Props): React.ReactNode {
+export default function ListTimeOffApproval({
+  search,
+}: Props): React.ReactNode {
   const router = useRouter();
 
-  const { data, isLoading, isFetching } = useSearchTimeOffReq(search);
+  const { data, isLoading, isFetching } = useSearchTimeOffAppr(search);
 
   const handlePaginate = (number: number) => {
     const params = new URLSearchParams(window.location.search);
@@ -49,91 +52,97 @@ export default function ListTimeOffRequest({ search }: Props): React.ReactNode {
           {
             header: "Karyawan",
             accessor: (row) => (
-              <div className="flex items-center justify-start gap-3 min-w-40">
+              <div className="flex items-center justify-start gap-3 min-w-50">
                 <div className="h-9 w-9 rounded-full bg-gray-200 flex justify-center items-center">
-                  {row.employee.fullname.charAt(0).toUpperCase()}
+                  {row.time_off_request.employee.fullname
+                    .charAt(0)
+                    .toUpperCase()}
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-medium ">{row.employee.fullname}</span>
+                  <span className="font-medium ">
+                    {row.time_off_request.employee.fullname}
+                  </span>
                   <span className="text-xs font-light text-zinc-400">
-                    {row.employee.contract.position.name} -
-                    {row.employee.contract.division.name}
+                    {row.time_off_request.employee.contract.position.name} -
+                    {row.time_off_request.employee.contract.division.name}
+                  </span>
+                </div>
+              </div>
+            ),
+          },
+
+          {
+            header: "Total Hari",
+            accessor: (row) => (
+              <div className="space-y-1">
+                <p className="border-b font-semibold">
+                  {row.time_off_request.requested_days} hari
+                </p>
+                <div className="font-semibold text-zinc-400 text-xs flex flex-col">
+                  <span>
+                    {toIDDate(new Date(row.time_off_request.start_date))}
+                  </span>
+                  <span>s/d</span>
+                  <span>
+                    {toIDDate(new Date(row.time_off_request.end_date))}
                   </span>
                 </div>
               </div>
             ),
           },
           {
-            header: "Tgl Mulai",
+            header: "Jenis Cuti",
             accessor: (row) => (
               <div>
-                <p>{toIDDate(new Date(row.start_date))}</p>
+                <p className="font-medium">
+                  {row.time_off_request.time_off_type.name}{" "}
+                </p>
               </div>
             ),
           },
-          {
-            header: "Tgl Ahir",
-            accessor: (row) => (
-              <div>
-                <p>{toIDDate(new Date(row.end_date))}</p>
-              </div>
-            ),
-          },
-          {
-            header: "Total Hari",
-            accessor: (row) => (
-              <div>
-                <p>{row.requested_days} hari</p>
-              </div>
-            ),
-          },
-
           {
             header: "Status",
             accessor: (row) => (
               <Badge
                 variant={
-                  row.request_status === "PENDING"
+                  row.status === "PENDING"
                     ? "warning"
-                    : row.request_status === "REJECTED"
+                    : row.status === "REJECTED"
                       ? "danger"
                       : "success"
                 }
               >
-                {row.request_status}
+                {row.status}
               </Badge>
             ),
           },
           {
-            header: "Approval",
-            accessor: (row) => (
-              <div className="min-w-30">
-                {row.approvals.map((item, i) => (
-                  <div key={i} className="flex">
-                    <p className="font-medium flex items-center gap-2">
-                      {item.employee_name}
-                      {item.status === "APPROVED" && (
-                        <Check size={13} className="text-green-600" />
-                      )}
-                    </p>
-                  </div>
-                ))}
-              </div>
+            header: "Detail",
+            accessor: () => (
+              <Button
+                size="sm"
+                variant="outline"
+                suffixIcon={<Info size={16} />}
+              >
+                Lihat
+              </Button>
             ),
           },
-
           {
             header: "Action",
-            accessor: () => (
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  asChild
-                  prefixIcon={<Printer size={16} />}
-                >
-                  Print
-                </Button>
+            accessor: (row) => (
+              <div className="flex gap-3 items-center">
+                {row.status === "PENDING" ? (
+                  <ActionTimeOffAppr id={row.id} />
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    suffixIcon={<Printer size={16} />}
+                  >
+                    Cetak bukti
+                  </Button>
+                )}
               </div>
             ),
             className: "text-right",

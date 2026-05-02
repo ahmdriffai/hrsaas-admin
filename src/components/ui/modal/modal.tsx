@@ -42,7 +42,7 @@ export default function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Overlay */}
-      <div className="absolute inset-0 bg-zinc-700/40" onClick={onClose} />
+      <div className="absolute inset-0 bg-zinc-600/20" onClick={onClose} />
 
       {/* Modal */}
       <div

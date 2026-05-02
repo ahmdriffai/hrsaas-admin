@@ -1,7 +1,15 @@
 import { EmployeeSchema } from "@/features/employee/schemas/employee-schema";
 import z from "zod/v3";
 
-export const TimeOffSchema = z.object({
+export const Approvals = z.object({
+  employee_name: z.string(),
+  is_required: z.boolean(),
+  status: z.string(),
+  action_at: z.number(),
+  action_reason: z.string(),
+});
+
+export const TimeOffRequestSchema = z.object({
   id: z.string(),
   employee_id: z.string(),
   time_off_type_id: z.string(),
@@ -19,6 +27,7 @@ export const TimeOffSchema = z.object({
     is_quota_based: z.boolean(),
     default_quota_days: z.number(),
   }),
+  approvals: z.array(Approvals),
 });
 
 export const SearchTimeOffRequestSchema = z.object({
@@ -32,4 +41,4 @@ export const SearchTimeOffRequestSchema = z.object({
 });
 
 export type SearchTimeOffRequest = z.infer<typeof SearchTimeOffRequestSchema>;
-export type TimeOff = z.infer<typeof TimeOffSchema>;
+export type TimeOffRequest = z.infer<typeof TimeOffRequestSchema>;

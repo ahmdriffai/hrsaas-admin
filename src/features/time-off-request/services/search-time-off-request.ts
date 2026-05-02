@@ -1,10 +1,13 @@
 import { api } from "@/lib/axios";
 import { PaginatedData } from "@/lib/response";
-import { SearchTimeOffRequest, TimeOff } from "../schemas/time-off-schema";
+import {
+  SearchTimeOffRequest,
+  TimeOffRequest,
+} from "../schemas/time-off-schema";
 
-export const searchTimeOff = async (
+export const searchTimeOffRequest = async (
   search: SearchTimeOffRequest,
-): Promise<PaginatedData<TimeOff>> => {
+): Promise<PaginatedData<TimeOffRequest>> => {
   const response = await api.get("/time-off-requests", {
     params: {
       employee_id: search.employee_id,

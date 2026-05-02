@@ -1,5 +1,4 @@
 "use client";
-
 import Header from "@/components/shared/header";
 import Sidebar from "@/components/shared/sidebar/sidebar";
 import { X } from "lucide-react";

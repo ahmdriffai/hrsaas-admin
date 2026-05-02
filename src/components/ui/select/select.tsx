@@ -41,7 +41,7 @@ export default function Select({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className={clsx(
-            "text-md w-full appearance-none rounded-xl border bg-white px-4 pt-6 pb-2 transition-all outline-none",
+            "text-sm w-full appearance-none rounded-xl border bg-white px-4 pt-6 pb-2 transition-all outline-none",
             disabled && "disabled:bg-gray-100 cursor-not-allowed",
             error
               ? "border-red-500"

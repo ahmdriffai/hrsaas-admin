@@ -1,3 +1,4 @@
+import { Option } from "@/components/ui/select/select";
 import { Position } from "@/features/position/schemas/position-schema";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -63,4 +64,15 @@ export function diffDateDetail(start: Date, end: Date) {
   }
 
   return { years, months, days };
+}
+
+export function mapToOptions<T>(
+  data: T[],
+  getLabel: (item: T) => string,
+  getValue: (item: T) => string,
+): Option[] {
+  return data.map((item) => ({
+    label: getLabel(item),
+    value: getValue(item),
+  }));
 }

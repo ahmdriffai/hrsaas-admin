@@ -83,7 +83,7 @@ export default function ListPosition({ search }: Props): React.ReactNode {
         <div className="flex flex-col w-full gap-5 justify-cente items-end mt-5">
           <div className="flex w-full items-center justify-between gap-x-1">
             <p className="font-bold text-xs">
-              Menampilkan {data?.data?.length} dari {data?.paging.total_item}{" "}
+              Menampilkan {data?.data?.length} dari {data?.paging?.total_item}{" "}
               total data.
             </p>
             <PageSelector

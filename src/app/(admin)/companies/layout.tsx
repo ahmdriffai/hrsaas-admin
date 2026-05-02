@@ -20,11 +20,7 @@ const tabs: Tab[] = [
 export default function CompanyLayout({ children }: Props) {
   return (
     <div>
-      <div className="w-full border-b mb-10">
-        <div className="flex gap-6">
-          <Tabs tabs={tabs} />
-        </div>
-      </div>
+      <Tabs tabs={tabs} />
 
       {/* Conten */}
       {children}
