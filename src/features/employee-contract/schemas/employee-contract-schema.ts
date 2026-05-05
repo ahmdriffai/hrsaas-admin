@@ -25,6 +25,19 @@ export const CreateEmployeeContractSchema = z.object({
   salary: z.coerce.number().min(0, "Gaji tidak boleh negatif"),
 });
 
+export const SearchEmployeeContractRequestSchema = z.object({
+  employee_id: z.string().optional(),
+  division_id: z.string().optional(),
+  position_id: z.string().optional(),
+  active_only: z.string().optional(),
+  page: z.number().optional(),
+  size: z.number().optional(),
+});
 
 export type EmployeeContract = z.infer<typeof EmployeeContractSchema>;
-export type CreateEmployeeContract = z.infer<typeof CreateEmployeeContractSchema>;
+export type CreateEmployeeContract = z.infer<
+  typeof CreateEmployeeContractSchema
+>;
+export type SearchEmployeeContractRequest = z.infer<
+  typeof SearchEmployeeContractRequestSchema
+>;

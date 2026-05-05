@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     domains: ["www.gravatar.com"],
     dangerouslyAllowLocalIP: true, // 🔥 ini kunci
   },
+  output: "standalone",
 };
 
 export default nextConfig;
