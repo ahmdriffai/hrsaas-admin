@@ -1,15 +1,6 @@
 import { EmployeeSchema } from "@/features/employee/schemas/employee-schema";
+import { SanctionTypeSchema } from "@/features/sanction-type/schemas/sanction-type-schema";
 import z from "zod/v3";
-
-export const SanctionTypeSchema = z.object({
-  id: z.string(),
-  company_id: z.string(),
-  name: z.string(),
-  description: z.string(),
-  note: z.string(),
-  created_at: z.number(),
-  updated_at: z.number(),
-});
 
 export const EmployeeSanctionSchema = z.object({
   id: z.string(),
