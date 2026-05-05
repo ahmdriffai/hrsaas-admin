@@ -24,6 +24,13 @@ export const maritalStatus: Option[] = [
   { value: "TK2", label: "TK2" },
 ];
 
+export const contractType: Option[] = [
+  { value: "Tetap", label: "Karyawan Tetap" },
+  { value: "Kontrak", label: "Karyawan Kontrak" },
+  { value: "Magang", label: "Magang" },
+  { value: "Freelance", label: "Freelance" },
+];
+
 export const sanctionLevel: number[] = [1, 2, 3];
 
 export const days = [

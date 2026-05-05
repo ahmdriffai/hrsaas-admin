@@ -1,4 +1,6 @@
 import { UserSchema } from "@/features/auth/schemas/auth-schema";
+import { EmployeeContractSchema } from "@/features/employee-contract/schemas/employee-contract-schema";
+
 import z from "zod/v3";
 
 export const DivisionSchema = z.object({
@@ -13,15 +15,6 @@ export const PositionSchema = z.object({
   name: z.string(),
   is_approver: z.boolean(),
   company_id: z.string(),
-});
-
-export const EmployeeContractSchema = z.object({
-  employee_id: z.string(),
-  contract_type: z.string(),
-  start_date: z.number(),
-  salary: z.number(),
-  division: DivisionSchema,
-  position: PositionSchema,
 });
 
 export const EmployeeSchema = z.object({
