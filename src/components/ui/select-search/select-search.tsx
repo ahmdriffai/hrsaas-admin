@@ -91,7 +91,10 @@ export default function SelectSearch({
 
         {/* Dropdown */}
         {isOpen && (
-          <div className="absolute left-0 right-0 top-full z-10 mt-2 rounded-xl border bg-white shadow-lg">
+          <div
+            className="absolute left-0 right-0 top-full z-10 mt-2 rounded-xl border bg-white shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Search input */}
             <div className="p-2">
               <input
@@ -113,7 +116,7 @@ export default function SelectSearch({
                     onClick={() => {
                       onChange?.(opt.value);
                       setIsOpen(false);
-                      setSearch("");
+                      setIsFocused(false);
                     }}
                     className="cursor-pointer px-4 py-2 text-sm hover:bg-gray-100"
                   >

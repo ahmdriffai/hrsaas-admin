@@ -5,7 +5,6 @@ import clsx from "clsx";
 import {
   Building,
   CalendarHeart,
-  ClockFading,
   DoorClosed,
   Home,
   LucideIcon,
@@ -54,7 +53,6 @@ export default function Sidebar() {
       },
       { label: "Kehadiran", icon: CalendarHeart, path: "/attendances" },
       { label: "Kunjungan", icon: MapPinned, path: "/visits" },
-      { label: "Shift", icon: ClockFading, path: "/shifts" },
       {
         label: "Sanksi / pelanggaran",
         icon: TriangleAlert,

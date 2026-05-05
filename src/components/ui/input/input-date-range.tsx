@@ -1,4 +1,4 @@
-import DateRangePicker from "@/components/shared/date-picker/date-range-picker";
+import DateRangePicker from "@/components/shared/date-picker-old/date-range-picker";
 import { useState } from "react";
 import Input from "./input";
 

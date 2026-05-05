@@ -1,5 +1,4 @@
-"use client";
-import Button from "@/components/ui/button/button";
+import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import {
   addDays,
@@ -14,19 +13,17 @@ import {
   subMonths,
 } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
-interface Props {
+type Props = {
   value?: Date;
   onChange?: (date: Date) => void;
-}
+  classname?: string;
+};
 
 const days = ["Min", "Sn", "Sl", "R", "Km", "J", "Sb"];
 
-export default function DatePicker({
-  value,
-  onChange,
-}: Props): React.ReactNode {
+export default function DatePicker({ value, onChange, classname }: Props) {
   const [mode, setMode] = useState<"date" | "month" | "year">("date");
   const [currentMonth, setCurrentMonth] = useState(value || new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(value || null);
@@ -37,13 +34,11 @@ export default function DatePicker({
   const startDate = startOfWeek(monthStart);
   const endDate = endOfWeek(monthEnd);
 
-  // handle select
   const handleSelect = (day: Date) => {
     setSelectedDate(day);
     onChange?.(day);
   };
 
-  // Render header
   const renderHeader = () => (
     <div className="flex items-center justify-between mb-4">
       <Button
@@ -94,50 +89,11 @@ export default function DatePicker({
     </div>
   );
 
-  const renderCells = () => {
-    const rows = [];
-    let day = startDate;
-
-    while (day <= endDate) {
-      const daysRow = [];
-
-      for (let i = 0; i < 7; i++) {
-        const cloneDay = day;
-
-        daysRow.push(
-          <div
-            key={day.toString()}
-            onClick={() => handleSelect(cloneDay)}
-            className={clsx(
-              "h-12 w-12 my-0.5 flex text-sm font-medium items-center justify-center cursor-pointer rounded-full",
-              !isSameMonth(day, monthStart) && "text-gray-300",
-              isSameDay(day, selectedDate || new Date(0)) &&
-                "bg-black text-white",
-              "hover:border hover:border-gray-900",
-            )}
-          >
-            {format(day, "d")}
-          </div>,
-        );
-
-        day = addDays(day, 1);
-      }
-
-      rows.push(
-        <div key={day.toString()} className="grid grid-cols-7">
-          {daysRow}
-        </div>,
-      );
-    }
-
-    return <div>{rows}</div>;
-  };
-
   const renderMonths = () => {
     const months = Array.from({ length: 12 });
 
     return (
-      <div className="grid grid-cols-3 gap-x-15 gap-y-10">
+      <div className="grid grid-cols-3 gap-2">
         {months.map((_, i) => {
           const monthDate = new Date(currentMonth.getFullYear(), i, 1);
 
@@ -149,7 +105,7 @@ export default function DatePicker({
                 setMode("date");
               }}
               className={clsx(
-                "p-2 text-center cursor-pointer rounded-lg hover:bg-gray-100",
+                "p-3 text-center cursor-pointer rounded-lg hover:bg-gray-100",
                 i === currentMonth.getMonth() && "bg-black text-white",
               )}
             >
@@ -166,7 +122,7 @@ export default function DatePicker({
     const startYear = year - 6; // range 12 tahun
 
     return (
-      <div className="grid grid-cols-3 gap-x-15 gap-y-10">
+      <div className="grid grid-cols-3 gap-2">
         {Array.from({ length: 12 }).map((_, i) => {
           const y = startYear + i;
 
@@ -190,8 +146,53 @@ export default function DatePicker({
     );
   };
 
+  const renderCells = () => {
+    const rows = [];
+    let day = startDate;
+
+    while (day <= endDate) {
+      const daysRow = [];
+
+      for (let i = 0; i < 7; i++) {
+        const cloneDay = day;
+
+        daysRow.push(
+          <div
+            key={day.toString()}
+            onClick={() => handleSelect(cloneDay)}
+            className={clsx(
+              "h-10 w-10 flex text-sm font-medium items-center justify-center cursor-pointer rounded-full",
+              !isSameMonth(day, monthStart) && "text-gray-300",
+              isSameDay(day, selectedDate || new Date(0)) &&
+                "bg-black text-white",
+              "hover:border hover:border-gray-900",
+            )}
+          >
+            {format(day, "d")}
+          </div>,
+        );
+
+        day = addDays(day, 1);
+      }
+
+      rows.push(
+        <div key={day.toString()} className="grid grid-cols-7">
+          {daysRow}
+        </div>,
+      );
+    }
+
+    return <div>{rows}</div>;
+  };
+
   return (
-    <div className="w-sm  px-6 py-4 bg-white rounded-2xl m-3 shadow-custom-lg">
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className={clsx(
+        "min-w-xs min-h-xs w-full rounded-2xl bg-white p-5 ",
+        classname,
+      )}
+    >
       {renderHeader()}
       {mode === "date" && (
         <>
@@ -199,6 +200,7 @@ export default function DatePicker({
           {renderCells()}
         </>
       )}
+
       {mode === "month" && renderMonths()}
       {mode === "year" && renderYears()}
     </div>

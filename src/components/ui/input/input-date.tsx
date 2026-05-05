@@ -1,6 +1,6 @@
 "use client";
 
-import DatePicker from "@/components/shared/date-picker/date-picker";
+import DatePicker from "@/components/shared/date-picker-old/date-picker";
 import { formatDate } from "@/lib/utils";
 import { forwardRef, useState } from "react";
 import Input from "./input";
