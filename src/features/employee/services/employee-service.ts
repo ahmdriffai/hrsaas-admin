@@ -45,6 +45,21 @@ export const createEmployee = async (
   return { ...response.data, data: employee }; // Return the validated data
 };
 
+export const importEmployeeExcel = async (file: File): Promise<ResponseData<number>> => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post("/employees/import-excel", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  if (response.status !== 200) {
+    throw new Error(response.data.error || "Gagal mengimport data karyawan");
+  }
+
+  return response.data;
+};
+
 export const getEmployeeById = async (
   id: string,
 ): Promise<ResponseData<Employee>> => {
