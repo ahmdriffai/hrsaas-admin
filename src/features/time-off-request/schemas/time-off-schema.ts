@@ -1,4 +1,5 @@
 import { EmployeeSchema } from "@/features/employee/schemas/employee-schema";
+import { TimeOffTypeSchema } from "@/features/time-off-type/schemas/time-off-type-schema";
 import z from "zod/v3";
 
 export const Approvals = z.object({
@@ -20,13 +21,7 @@ export const TimeOffRequestSchema = z.object({
   request_status: z.string(),
   created_at: z.number(),
   employee: EmployeeSchema,
-  time_off_type: z.object({
-    id: z.string(),
-    name: z.string(),
-    category: z.string(),
-    is_quota_based: z.boolean(),
-    default_quota_days: z.number(),
-  }),
+  time_off_type: TimeOffTypeSchema,
   approvals: z.array(Approvals),
 });
 

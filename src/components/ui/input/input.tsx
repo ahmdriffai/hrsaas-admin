@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 
 type Props = {
   label: string;
@@ -9,6 +9,9 @@ type Props = {
   error?: string;
   containerClassName?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
+
+const hasInputValue = (value: React.InputHTMLAttributes<HTMLInputElement>["value"]) =>
+  value !== undefined && value !== null && value !== "";
 
 const Input = forwardRef<HTMLInputElement, Props>(
   (
@@ -21,20 +24,30 @@ const Input = forwardRef<HTMLInputElement, Props>(
       disabled,
       readOnly,
       value,
+      defaultValue,
       onFocus,
       onBlur,
+      onChange,
       ...props
     },
     ref,
   ) => {
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const [isFocused, setIsFocused] = useState(false);
-    const [hasValue, setHasValue] = useState(false);
+    const [hasValue, setHasValue] = useState(
+      hasInputValue(value) || hasInputValue(defaultValue),
+    );
 
     const isActive = isFocused || hasValue;
 
     useEffect(() => {
-      setHasValue(!!value);
-    }, [value]);
+      const currentValue = inputRef.current?.value;
+      setHasValue(
+        hasInputValue(value) ||
+          hasInputValue(defaultValue) ||
+          hasInputValue(currentValue),
+      );
+    }, [defaultValue, value]);
 
     return (
       <div className="space-y-0.5">
@@ -58,22 +71,34 @@ const Input = forwardRef<HTMLInputElement, Props>(
 
             {/* Input */}
             <input
-              ref={ref}
+              ref={(node) => {
+                inputRef.current = node;
+
+                if (typeof ref === "function") {
+                  ref(node);
+                  return;
+                }
+
+                if (ref) {
+                  ref.current = node;
+                }
+              }}
               disabled={disabled}
               readOnly={readOnly}
               value={value}
+              defaultValue={defaultValue}
               onFocus={(e) => {
                 setIsFocused(true);
                 onFocus?.(e);
               }}
               onBlur={(e) => {
                 setIsFocused(false);
-                setHasValue(!!e.target.value); // 🔥 ambil dari DOM
+                setHasValue(hasInputValue(e.target.value));
                 onBlur?.(e);
               }}
               onChange={(e) => {
-                setHasValue(!!e.target.value); // 🔥 ini kunci
-                props.onChange?.(e); // tetap forward ke RHF
+                setHasValue(hasInputValue(e.target.value));
+                onChange?.(e);
               }}
               className={clsx(
                 "w-full bg-transparent outline-none text-sm",
