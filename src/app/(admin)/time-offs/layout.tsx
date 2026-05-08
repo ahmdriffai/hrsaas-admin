@@ -21,7 +21,6 @@ export default function TimeOffLayout({ children }: Props) {
       totalData: timeOffApproval?.data?.length,
     },
     { label: "Jenis Cuti", path: "/time-offs/types" },
-    { label: "Kuota Cuti", path: "/time-offs/balances" },
   ];
 
   return (
