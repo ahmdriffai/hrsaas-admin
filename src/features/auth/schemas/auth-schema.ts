@@ -1,10 +1,15 @@
 import { z } from "zod/v3";
 
+export const RoleSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
 export const UserSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string().email(),
-  role: z.enum(["ADMIN", "USER"]),
+  roles: z.array(RoleSchema),
   company_id: z.string(),
   created_at: z.number(),
   updated_at: z.number(),
@@ -21,5 +26,6 @@ export const SignInRequestSchema = z.object({
 });
 
 export type User = z.infer<typeof UserSchema>;
+export type Role = z.infer<typeof RoleSchema>;
 export type Auth = z.infer<typeof AuthSchema>;
 export type SignInRequest = z.infer<typeof SignInRequestSchema>;
