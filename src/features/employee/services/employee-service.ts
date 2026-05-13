@@ -5,7 +5,6 @@ import { formatDate } from "@/lib/utils";
 import {
   CreateEmployee,
   Employee,
-  EmployeeSchema,
   SearchEmployeeRequest,
 } from "../schemas/employee-schema";
 
@@ -40,12 +39,14 @@ export const createEmployee = async (
     throw new Error(response.data.error || "failed to create employee");
   }
 
-  const employee = EmployeeSchema.parse(response.data.data); // Validate the response data against the schema
+  const employee = response.data.data; // Validate the response data against the schema
 
   return { ...response.data, data: employee }; // Return the validated data
 };
 
-export const importEmployeeExcel = async (file: File): Promise<ResponseData<number>> => {
+export const importEmployeeExcel = async (
+  file: File,
+): Promise<ResponseData<number>> => {
   const formData = new FormData();
   formData.append("file", file);
 
@@ -65,6 +66,6 @@ export const getEmployeeById = async (
 ): Promise<ResponseData<Employee>> => {
   const response = await api.get(`/employees/${id}`);
 
-  const employees = EmployeeSchema.parse(response.data.data); // Validate the response data against the schema
+  const employees = response.data.data; // Validate the response data against the schema
   return { ...response.data, data: employees }; // Return the validated data
 };

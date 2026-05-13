@@ -12,7 +12,7 @@ export default function ProfileEmployee({ id }: Props): React.ReactNode {
   const { data } = useDetailEmployee(id);
   const employee = data?.data;
   return (
-    <div className="p-6 w-sm bg-white border rounded-2xl h-fit">
+    <div className="p-6  bg-white border rounded-2xl h-fit w-[270px]">
       {/* image */}
       <div className="flex justify-center items-center flex-col gap-4 border-b pb-3">
         <ImageViewer
@@ -24,7 +24,7 @@ export default function ProfileEmployee({ id }: Props): React.ReactNode {
         <h2 className="font-semibold text-2xl text-center">
           {employee?.fullname}
         </h2>
-        <p>{employee?.contract.position.name}</p>
+        <p>{employee?.contract?.[0].position.name}</p>
       </div>
       <div className="mt-6 space-y-5">
         <div className="flex gap-2 items-center">

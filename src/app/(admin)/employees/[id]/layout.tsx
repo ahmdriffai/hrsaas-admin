@@ -18,7 +18,7 @@ export default async function LayoutDetailEmployee({
   const tabs: Tab[] = [
     { label: "General", path: `/employees/${id}/detail` },
     { label: "Kontrak", path: `/employees/${id}/contract` },
-    { label: "Gaji", path: `/employees/${id}/payroll` },
+    { label: "Kuota Cuti", path: `/employees/${id}/time-off-balance` },
     { label: "Dokumen", path: `/employees/${id}/docs` },
     { label: "Kehadiran", path: `/employees/${id}/attendance` },
     { label: "Sanksi", path: `/employees/${id}/sanction` },
@@ -33,7 +33,7 @@ export default async function LayoutDetailEmployee({
 
         {/* detail */}
 
-        <div className="w-full bg-white p-6 border rounded-2xl">
+        <div className="w-full max-w-3xl bg-white p-6 border rounded-2xl">
           <Tabs tabs={tabs} />
           {children}
         </div>

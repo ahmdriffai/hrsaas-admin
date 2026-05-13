@@ -30,7 +30,7 @@ export const EmployeeSchema = z.object({
   religion: z.string().max(50),
   phone: z.string().max(20),
   timezone: z.string().max(10),
-  contract: EmployeeContractSchema,
+  contract: z.array(EmployeeContractSchema).optional(),
   user: UserSchema,
 });
 

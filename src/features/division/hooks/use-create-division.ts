@@ -13,7 +13,7 @@ export const useCreateDivision = () => {
     onSuccess: async () => {
       // Simpan token ke localStorage atau state management
       queryClient.invalidateQueries({
-        queryKey: ["division"],
+        queryKey: ["divisions"],
         exact: false,
       });
       toast.success("Berhasil membuat divisi.");

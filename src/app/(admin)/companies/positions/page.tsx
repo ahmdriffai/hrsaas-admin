@@ -2,10 +2,10 @@ import Title from "@/components/ui/title/title";
 import ListPosition from "@/features/position/components/list-position";
 import MenuPosition from "@/features/position/components/menu-position";
 import { SearchPositionRequest } from "@/features/position/schemas/position-schema";
-import { api } from "@/lib/axios";
+import { serverApi } from "@/lib/server-api";
 import { getQueryclient } from "@/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { cookies } from "next/headers";
+import type React from "react";
 
 type Props = {
   searchParams: Promise<{
@@ -14,7 +14,8 @@ type Props = {
     size?: string;
   }>;
 };
-export default async function EmployeePage({
+
+export default async function PositionPage({
   searchParams,
 }: Props): Promise<React.ReactNode> {
   const params = await searchParams;
@@ -29,23 +30,15 @@ export default async function EmployeePage({
   };
 
   const queryClient = getQueryclient();
-  const cookieStore = cookies();
+
   await queryClient.prefetchQuery({
     queryKey: ["positions", search.key, search.page, search.size],
-    queryFn: async () => {
-      const response = await api.get("/positions", {
-        params: {
-          key: search.key,
-          page: search.page,
-          size: search.size,
-        },
-        headers: {
-          Cookie: cookieStore.toString(),
-        },
-      });
-
-      return response.data.data;
-    },
+    queryFn: () =>
+      serverApi("positions", {
+        key: search.key,
+        page: search.page,
+        size: search.size,
+      }),
   });
 
   return (

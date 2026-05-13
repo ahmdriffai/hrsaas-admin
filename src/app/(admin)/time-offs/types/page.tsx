@@ -1,25 +1,20 @@
 import Title from "@/components/ui/title/title";
 import ListTimeOffType from "@/features/time-off-type/components/list-time-off-type";
 import MenuTimeOffType from "@/features/time-off-type/components/menu-time-off-type";
-import { api } from "@/lib/axios";
+import { TimeOffType } from "@/features/time-off-type/schemas/time-off-type-schema";
+import { serverApi } from "@/lib/server-api";
 import { getQueryclient } from "@/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { cookies } from "next/headers";
+import type React from "react";
 
 export default async function TimeOffTypePage(): Promise<React.ReactNode> {
   const queryClient = getQueryclient();
-  const cookieStore = cookies();
 
   await queryClient.prefetchQuery({
     queryKey: ["time-off-types"],
     queryFn: async () => {
-      const response = await api.get("/time-off-types", {
-        headers: {
-          Cookie: cookieStore.toString(),
-        },
-      });
-
-      return response.data.data;
+      const res = await serverApi<{ data: TimeOffType[] }>("time-off-types");
+      return res.data;
     },
   });
 

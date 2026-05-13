@@ -2,6 +2,7 @@ import Title from "@/components/ui/title/title";
 import ListTimeOffRequest from "@/features/time-off-request/components/list-time-off";
 import MenuTimeOffRequest from "@/features/time-off-request/components/menu-time-off";
 import { SearchTimeOffRequest } from "@/features/time-off-request/schemas/time-off-schema";
+import { serverApi } from "@/lib/server-api";
 import { getQueryclient } from "@/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import type React from "react";
@@ -23,7 +24,7 @@ export default async function TimeOffRequestPage({
   const page = params.page || 1;
   const size = params.size || 10;
   const employee_id = params.employee_id || "";
-  const start_date = params.employee_id || "";
+  const start_date = params.start_date || "";
   const end_date = params.end_date || "";
   const request_status = params.request_status || "";
 
@@ -40,12 +41,15 @@ export default async function TimeOffRequestPage({
 
   await queryClient.prefetchQuery({
     queryKey: ["time-off-requests", search],
-    queryFn: async () => {
-      const res = await fetch(
-        `/api/time-off-requests?page=${search.page}&size=${search.size}`,
-      );
-      return res.json();
-    },
+    queryFn: () =>
+      serverApi("time-off-requests", {
+        page: search.page,
+        size: search.size,
+        employee_id: search.employee_id,
+        start_date: search.start_date,
+        end_date: search.end_date,
+        request_status: search.request_status,
+      }),
   });
 
   return (

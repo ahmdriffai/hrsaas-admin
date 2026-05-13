@@ -1,9 +1,10 @@
 import Title from "@/components/ui/title/title";
 import ListTimeOffApproval from "@/features/time-off-approval/components/list-time-off";
 import { SearchTimeOffApproval } from "@/features/time-off-approval/schemas/time-off-approval-schema";
+import { serverApi } from "@/lib/server-api";
 import { getQueryclient } from "@/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import React from "react";
+import type React from "react";
 
 type Props = {
   searchParams: Promise<{
@@ -11,7 +12,8 @@ type Props = {
     size?: string;
   }>;
 };
-export default async function TimeOffRequestPage({
+
+export default async function TimeOffApprovalPage({
   searchParams,
 }: Props): Promise<React.ReactNode> {
   const params = await searchParams;
@@ -27,12 +29,11 @@ export default async function TimeOffRequestPage({
 
   await queryClient.prefetchQuery({
     queryKey: ["time-off-approvals", search],
-    queryFn: async () => {
-      const res = await fetch(
-        `/api/time-off-approvals?page=${search.page}&size=${search.size}`,
-      );
-      return res.json();
-    },
+    queryFn: () =>
+      serverApi("time-off-approvals/_current", {
+        page: search.page,
+        size: search.size,
+      }),
   });
 
   return (

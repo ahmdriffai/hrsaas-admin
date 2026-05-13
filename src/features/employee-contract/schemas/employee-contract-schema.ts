@@ -11,6 +11,7 @@ export const EmployeeContractSchema = z.object({
   division_id: z.string(),
   position_id: z.string(),
   salary: z.number(),
+  is_active: z.boolean(),
   division: DivisionSchema,
   position: PositionSchema,
 });
