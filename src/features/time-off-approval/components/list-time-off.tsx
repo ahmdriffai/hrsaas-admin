@@ -63,8 +63,8 @@ export default function ListTimeOffApproval({
                     {row.time_off_request.employee.fullname}
                   </span>
                   <span className="text-xs font-light text-zinc-400">
-                    {row.time_off_request.employee.contract.position.name} -
-                    {row.time_off_request.employee.contract.division.name}
+                    {row.time_off_request.employee.contract?.[0].position.name}{" "}
+                    -{row.time_off_request.employee.contract?.[0].division.name}
                   </span>
                 </div>
               </div>

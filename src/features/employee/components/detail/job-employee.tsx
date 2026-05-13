@@ -12,8 +12,8 @@ interface Props {
 export default function JobEmployee({ id }: Props) {
   const { data } = useDetailEmployee(id);
   const employee = data?.data;
-  const startDate = employee?.contract?.start_date
-    ? new Date(employee.contract.start_date)
+  const startDate = employee?.contract?.[0].start_date
+    ? new Date(employee.contract[0].start_date)
     : undefined;
   const serviceDuration = startDate
     ? diffDateDetail(startDate, new Date())
