@@ -2,8 +2,10 @@ import Title from "@/components/ui/title/title";
 import ListSanction from "@/features/employee-sanction/components/list-employee-sanction";
 import SearchEmployeeSanction from "@/features/employee-sanction/components/search-employee-sanction";
 import { SearchEmployeeSanctionRequest } from "@/features/employee-sanction/schemas/employee-sanction-schema";
+import { serverApi } from "@/lib/server-api";
 import { getQueryclient } from "@/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import type React from "react";
 
 type Props = {
   searchParams: Promise<{
@@ -18,7 +20,9 @@ type Props = {
   }>;
 };
 
-export default async function EmployeeSanctionPage({ searchParams }: Props) {
+export default async function EmployeeSanctionPage({
+  searchParams,
+}: Props): Promise<React.ReactNode> {
   const params = await searchParams;
   const page = params.page || 1;
   const size = params.size || 10;
@@ -43,12 +47,18 @@ export default async function EmployeeSanctionPage({ searchParams }: Props) {
 
   await queryClient.prefetchQuery({
     queryKey: ["employee-sanctions", search],
-    queryFn: async () => {
-      const res = await fetch(
-        `/api/employee-sanctions?page=${search.page}&size=${search.size}`,
-      );
-      return res.json();
-    },
+    queryFn: () =>
+      serverApi("employee-sanctions", {
+        page: search.page,
+        size: search.size,
+        employee_id: search.employee_id,
+        sanction_id: search.sanction_id,
+        reason: search.reason,
+        start_date: search.start_date,
+        end_date: search.end_date,
+        // kirim string asli dari URL agar konsisten dengan backend
+        status: params.status,
+      }),
   });
 
   return (

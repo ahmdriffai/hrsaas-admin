@@ -2,6 +2,7 @@ import Title from "@/components/ui/title/title";
 import ListVisit from "@/features/visit/components/list-visit";
 import MenuVisit from "@/features/visit/components/menu-visit";
 import { SearchVisitRequest } from "@/features/visit/schemas/visit-schema";
+import { serverApi } from "@/lib/server-api";
 import { getQueryclient } from "@/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import type React from "react";
@@ -41,12 +42,15 @@ export default async function VisitPage({
 
   await queryClient.prefetchQuery({
     queryKey: ["visits", search],
-    queryFn: async () => {
-      const res = await fetch(
-        `/api/visits?page=${search.page}&size=${search.size}`,
-      );
-      return res.json();
-    },
+    queryFn: () =>
+      serverApi("visits", {
+        page: search.page,
+        size: search.size,
+        employee_id: search.employee_id,
+        start_date: search.start_date,
+        end_date: search.end_date,
+        sort_by: search.sort_by,
+      }),
   });
 
   return (

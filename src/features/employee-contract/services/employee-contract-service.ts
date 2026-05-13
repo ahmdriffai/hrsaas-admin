@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios";
 import { PaginatedData, ResponseData } from "@/lib/response";
+import { formatDate } from "@/lib/utils";
 import {
   CreateEmployeeContract,
   EmployeeContract,
@@ -26,7 +27,15 @@ export const getEmployeeContracts = async (
 export const createEmployeeContract = async (
   request: CreateEmployeeContract,
 ): Promise<ResponseData<EmployeeContract>> => {
-  const response = await api.post("/employee-contracts", request);
+  const response = await api.post("/employee-contracts", {
+    ...request,
+    start_date: request.start_date
+      ? formatDate(new Date(request.start_date))
+      : undefined,
+    end_date: request.end_date
+      ? formatDate(new Date(request.end_date))
+      : undefined,
+  });
 
   if (response.status !== 200) {
     throw new Error(response.data.error || "Gagal membuat kontrak karyawan");

@@ -5,7 +5,6 @@ import { formatDate } from "@/lib/utils";
 import {
   CreateEmployee,
   Employee,
-  EmployeeSchema,
   SearchEmployeeRequest,
 } from "../schemas/employee-schema";
 
@@ -40,7 +39,7 @@ export const createEmployee = async (
     throw new Error(response.data.error || "failed to create employee");
   }
 
-  const employee = EmployeeSchema.parse(response.data.data); // Validate the response data against the schema
+  const employee = response.data.data; // Validate the response data against the schema
 
   return { ...response.data, data: employee }; // Return the validated data
 };

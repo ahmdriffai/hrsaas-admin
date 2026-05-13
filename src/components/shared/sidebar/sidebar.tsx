@@ -4,7 +4,6 @@ import { useSearchTimeOffAppr } from "@/features/time-off-approval/hooks/use-sea
 import clsx from "clsx";
 import {
   Building,
-  CalendarHeart,
   DoorClosed,
   Home,
   LucideIcon,
@@ -52,7 +51,7 @@ export default function Sidebar() {
         path: "/time-offs",
         totalData: timeOffApproval?.data?.length ?? 0,
       },
-      { label: "Kehadiran", icon: CalendarHeart, path: "/attendances" },
+      // { label: "Kehadiran", icon: CalendarHeart, path: "/attendances" },
       { label: "Kunjungan", icon: MapPinned, path: "/visits" },
       {
         label: "Sanksi / pelanggaran",

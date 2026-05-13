@@ -9,7 +9,11 @@ interface Props {
 }
 
 const formatRupiah = (amount: number) =>
-  new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(amount);
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(amount);
 
 const isContractActive = (start: number, end?: number | null) => {
   const now = Date.now();
@@ -23,7 +27,8 @@ export default function ListEmployeeContract({ employeeId }: Props) {
     size: 50,
   });
 
-  if (isLoading) return <div className="text-sm text-zinc-400 py-4">Memuat data...</div>;
+  if (isLoading)
+    return <div className="text-sm text-zinc-400 py-4">Memuat data...</div>;
 
   return (
     <Table
@@ -51,7 +56,9 @@ export default function ListEmployeeContract({ employeeId }: Props) {
         {
           header: "Tanggal Berakhir",
           accessor: (row) =>
-            row.end_date ? toIDDate(new Date(row.end_date)) : (
+            row.end_date ? (
+              toIDDate(new Date(row.end_date))
+            ) : (
               <span className="text-zinc-400 text-xs">Tidak ada</span>
             ),
         },
@@ -62,7 +69,8 @@ export default function ListEmployeeContract({ employeeId }: Props) {
         {
           header: "Status",
           accessor: (row) => {
-            const active = isContractActive(row.start_date, row.end_date);
+            const active =
+              isContractActive(row.start_date, row.end_date) && row.is_active;
             return (
               <span
                 className={`text-xs font-medium px-2 py-1 rounded-full ${

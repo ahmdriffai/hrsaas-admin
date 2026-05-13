@@ -2,8 +2,10 @@ import Title from "@/components/ui/title/title";
 import ListEmployee from "@/features/employee/components/list-employee";
 import MenuEmployee from "@/features/employee/components/menu-employee";
 import { SearchEmployeeRequest } from "@/features/employee/schemas/employee-schema";
+import { serverApi } from "@/lib/server-api";
 import { getQueryclient } from "@/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import type React from "react";
 
 type Props = {
   searchParams: Promise<{
@@ -12,6 +14,7 @@ type Props = {
     size?: string;
   }>;
 };
+
 export default async function EmployeePage({
   searchParams,
 }: Props): Promise<React.ReactNode> {
@@ -30,12 +33,12 @@ export default async function EmployeePage({
 
   await queryClient.prefetchQuery({
     queryKey: ["employees", search.key, search.page, search.size],
-    queryFn: async () => {
-      const res = await fetch(
-        `/api/employees?key=${search.key}&page=${search.page}&size=${search.size}`,
-      );
-      return res.json();
-    },
+    queryFn: () =>
+      serverApi("employees", {
+        key: search.key,
+        page: search.page,
+        size: search.size,
+      }),
   });
 
   return (

@@ -33,7 +33,7 @@ export default async function LayoutDetailEmployee({
 
         {/* detail */}
 
-        <div className="w-full bg-white p-6 border rounded-2xl">
+        <div className="w-full max-w-3xl bg-white p-6 border rounded-2xl">
           <Tabs tabs={tabs} />
           {children}
         </div>
