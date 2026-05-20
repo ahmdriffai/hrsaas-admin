@@ -58,7 +58,7 @@ export default function Sidebar() {
         icon: TriangleAlert,
         path: "/employee-sanctions",
       },
-      { label: "User Menajemen", icon: UserLock, path: "/settings" },
+      { label: "User Menajemen", icon: UserLock, path: "/users" },
       { label: "Pengaturan", icon: Settings2, path: "/settings" },
     ],
     [timeOffApproval],

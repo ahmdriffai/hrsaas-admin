@@ -2,6 +2,10 @@ import { api } from "@/lib/axios";
 import { ResponseData } from "@/lib/response";
 import { Auth, AuthSchema } from "../schemas/auth-schema";
 
+export const logout = async (): Promise<void> => {
+  await api.delete("/users/_logout");
+};
+
 export const login = async (
   email: string,
   password: string,
