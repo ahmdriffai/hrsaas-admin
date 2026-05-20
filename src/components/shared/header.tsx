@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { DropdownMenu } from "radix-ui";
+import { useLogout } from "@/features/user/hooks/use-logout";
 import { LogOut, Menu, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { DropdownMenu } from "radix-ui";
 import Logo from "./logo";
 
 export default function Header({
@@ -14,11 +15,7 @@ export default function Header({
   user?: any;
 }) {
   const router = useRouter();
-
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.replace("/sign-in");
-  };
+  const { mutate: handleLogout } = useLogout();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-[1.5px] border-zinc-100 bg-white px-6 md:px-10 py-6 flex items-center justify-between">
@@ -63,7 +60,7 @@ export default function Header({
 
               <DropdownMenu.Item
                 className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 cursor-pointer focus:outline-none focus:bg-red-50"
-                onSelect={handleLogout}
+                onSelect={() => handleLogout()}
               >
                 <LogOut className="w-4 h-4" />
                 Logout
