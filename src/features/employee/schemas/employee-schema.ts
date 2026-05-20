@@ -1,4 +1,4 @@
-import { UserSchema } from "@/features/auth/schemas/auth-schema";
+import { UserSchema } from "@/features/user/schemas/auth-schema";
 import { EmployeeContractSchema } from "@/features/employee-contract/schemas/employee-contract-schema";
 
 import z from "zod/v3";

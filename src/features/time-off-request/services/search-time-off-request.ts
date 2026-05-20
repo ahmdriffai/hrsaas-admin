@@ -13,6 +13,8 @@ export const searchTimeOffRequest = async (
       employee_id: search.employee_id,
       time_off_type_id: search.time_off_type_id,
       request_status: search.request_status,
+      start_date: search.start_date,
+      end_date: search.end_date,
       page: search.page,
       size: search.size,
     },

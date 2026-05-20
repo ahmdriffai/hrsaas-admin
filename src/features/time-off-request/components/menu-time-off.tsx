@@ -5,21 +5,26 @@ import SelectSearch from "@/components/ui/select-search/select-search";
 import Select from "@/components/ui/select/select";
 import { useGetEmployees } from "@/features/employee/hooks/use-get-employee";
 import { mapToOptions } from "@/lib/utils";
-import { Download, Monitor } from "lucide-react";
-import Link from "next/link";
+import { CalendarDays, List } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { SearchTimeOffRequest } from "../schemas/time-off-schema";
 
 interface Props {
   search: SearchTimeOffRequest;
+  view: string;
 }
-export default function MenuTimeOffRequest({ search }: Props): React.ReactNode {
+
+export default function MenuTimeOffRequest({
+  search,
+  view,
+}: Props): React.ReactNode {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [employeeID, setEmployeeID] = useState<string>(
     search.employee_id ?? "",
   );
-
   const [status, setStatus] = useState<string>(search.request_status ?? "");
 
   const { data: employees } = useGetEmployees({ size: 500 });
@@ -28,8 +33,6 @@ export default function MenuTimeOffRequest({ search }: Props): React.ReactNode {
     (p) => p.fullname,
     (p) => p.id,
   );
-
-  const router = useRouter();
 
   function updateQuery(newParams: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString());
@@ -42,7 +45,6 @@ export default function MenuTimeOffRequest({ search }: Props): React.ReactNode {
       }
     });
 
-    // reset page kalau filter berubah
     params.set("page", "1");
     params.set("size", "10");
 
@@ -51,35 +53,55 @@ export default function MenuTimeOffRequest({ search }: Props): React.ReactNode {
 
   function handleSelectEmployeeID(data: string) {
     setEmployeeID(data);
-
-    updateQuery({
-      employee_id: data,
-    });
+    updateQuery({ employee_id: data });
   }
 
   function handleSelectStatus(data: string) {
     setStatus(data);
+    updateQuery({ request_status: data });
+  }
 
-    updateQuery({
-      request_status: data,
-    });
+  function setView(v: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("view", v);
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   return (
-    <div className="mb-4 flex flex-col items-start justify-between bg-white border rounded-2xl p-5 gap-6  ">
-      <div className="flex gap-3  items-center justify-center ">
-        <Link href="/employees/create">
-          <Button variant="outline" prefixIcon={<Monitor size={18} />}>
-            Visual
-          </Button>
-        </Link>
-        <Link href="/employees/create">
-          <Button variant="outline" prefixIcon={<Download size={18} />}>
-            Download
-          </Button>
-        </Link>
+    <div className="mb-4 flex flex-col items-start justify-between bg-white border rounded-2xl p-5 gap-6">
+      <div className="flex gap-3 items-center justify-between w-full">
+        {/* View toggle */}
+        <div className="flex items-center gap-2 p-1 bg-zinc-100 rounded-xl">
+          <button
+            onClick={() => setView("table")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              view !== "calendar"
+                ? "bg-white shadow-sm text-black"
+                : "text-zinc-500 hover:text-zinc-700"
+            }`}
+          >
+            <List className="w-4 h-4" />
+            Tabel
+          </button>
+          <button
+            onClick={() => setView("calendar")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              view === "calendar"
+                ? "bg-white shadow-sm text-black"
+                : "text-zinc-500 hover:text-zinc-700"
+            }`}
+          >
+            <CalendarDays className="w-4 h-4" />
+            Kalender
+          </button>
+        </div>
+
+        <Button variant="outline" size="sm">
+          Download
+        </Button>
       </div>
-      <div className="flex gap-5">
+
+      <div className="flex gap-5 flex-wrap">
         <div className="w-60">
           <SelectSearch
             label="Cari karyawan"
