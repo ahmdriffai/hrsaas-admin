@@ -12,23 +12,31 @@ export default function Tabs({ tabs }: Props) {
   const pathname = usePathname();
   const isActive = (url: string) =>
     pathname === url || pathname.startsWith(url + "/", 1);
+
   return (
-    <div className="w-full border-b mb-10 overflow-scroll">
-      <div className="flex gap-6 items-center">
+    <div className="w-full mb-8">
+      <div className="inline-flex items-center gap-1 bg-gray-100 p-1 rounded-xl overflow-x-auto max-w-full">
         {tabs.map((tab) => (
           <Link
             href={tab.path}
             key={tab.label}
             className={clsx(
-              " border-black pb-2 text-md transition-all",
+              "relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200",
               isActive(tab.path)
-                ? "text-black font-medium border-b-2"
-                : "text-gray-400 hover:text-black",
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-500 hover:text-gray-700 hover:bg-white/60",
             )}
           >
             {tab.label}
             {tab.totalData! > 0 && (
-              <span className="bg-destructive text-[11px] aspect-square text-white p-1.5 rounded-full ms-2">
+              <span
+                className={clsx(
+                  "inline-flex items-center justify-center min-w-4.5 h-4.5 text-[10px] font-semibold rounded-full px-1 transition-colors duration-200",
+                  isActive(tab.path)
+                    ? "bg-destructive text-white"
+                    : "bg-gray-300 text-gray-500",
+                )}
+              >
                 {tab.totalData}
               </span>
             )}

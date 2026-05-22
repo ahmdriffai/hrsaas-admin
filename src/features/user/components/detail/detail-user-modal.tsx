@@ -4,6 +4,7 @@ import Button from "@/components/ui/button/button";
 import Input from "@/components/ui/input/input";
 import Modal from "@/components/ui/modal/modal";
 import Switch from "@/components/ui/switch/switch";
+import { useSearchRole } from "@/features/role/hooks/use-search-role";
 import { BadgeCheck, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { useDetailUser } from "../../hooks/use-detail-user";
@@ -24,10 +25,19 @@ export default function DetailUserModal({
   const { data } = useDetailUser(id);
   const mutation = useUpdateUser(id);
   const resetMutation = useResetPassword(id);
+  const { data: rolesData } = useSearchRole({ key: "", page: 1, size: 100 });
   const user = data?.data;
 
   const [isResetOpen, setIsResetOpen] = useState(false);
   const [newPassword, setNewPassword] = useState("");
+
+  const userRoleIds = new Set(user?.roles?.map((r) => r.id) ?? []);
+
+  const handleToggleRole = (roleId: string) => {
+    const updated = new Set(userRoleIds);
+    updated.has(roleId) ? updated.delete(roleId) : updated.add(roleId);
+    mutation.mutate({ role_ids: Array.from(updated) });
+  };
 
   const handleResetSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,6 +109,27 @@ export default function DetailUserModal({
             </div>
           </div>
         </div>
+
+        {/* Roles */}
+        {rolesData?.data && rolesData.data.length > 0 && (
+          <div className="pb-6 border-b border-gray-200 mt-2">
+            <div className="flex items-center gap-1.5 mb-3">
+              <ShieldCheck size={15} className="text-gray-500" />
+              <p className="text-md font-semibold">Roles</p>
+            </div>
+            <div className="space-y-3">
+              {rolesData.data.map((role) => (
+                <div key={role.id} className="flex items-center justify-between">
+                  <p className="text-sm text-gray-700">{role.name}</p>
+                  <Switch
+                    checked={userRoleIds.has(role.id)}
+                    onChange={() => handleToggleRole(role.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Reset Password */}
         <div className="mt-6 pt-4 border-t">
