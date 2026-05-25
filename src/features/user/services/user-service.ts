@@ -7,6 +7,11 @@ import {
   User,
 } from "../schemas/auth-schema";
 
+export const getCurrentUser = async (): Promise<ResponseData<User>> => {
+  const response = await api.get("/users/_current");
+  return { ...response.data, data: response.data.data };
+};
+
 export const getUsers = async (
   search: SearchUserRequest,
 ): Promise<PaginatedData<User>> => {

@@ -1,7 +1,7 @@
 "use client";
 
-import { Pagination } from "@/components/shared/pagination/pagination";
 import { PageSelector } from "@/components/shared/page-selector/page-selector";
+import { Pagination } from "@/components/shared/pagination/pagination";
 import Button from "@/components/ui/button/button";
 import { BadgeCheck, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -14,13 +14,7 @@ interface Props {
   search: SearchUserRequest;
 }
 
-function UserCard({
-  user,
-  onDetail,
-}: {
-  user: User;
-  onDetail: () => void;
-}) {
+function UserCard({ user, onDetail }: { user: User; onDetail: () => void }) {
   return (
     <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm flex items-center gap-4">
       {/* Avatar */}
@@ -92,8 +86,8 @@ export default function ListUser({ search }: Props): React.ReactNode {
 
   return (
     <div>
-      <div className="flex flex-col gap-3">
-        {data?.data.length === 0 && (
+      <div className="grid grid-cols-1 gap-3">
+        {data?.data?.length === 0 && (
           <div className="bg-white border border-gray-100 rounded-2xl p-10 text-center text-gray-400 text-sm">
             Tidak ada data pengguna
           </div>

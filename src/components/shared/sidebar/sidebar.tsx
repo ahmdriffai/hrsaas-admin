@@ -1,9 +1,12 @@
 "use client";
 import Badge from "@/components/ui/badge/badge";
 import { useSearchTimeOffAppr } from "@/features/time-off-approval/hooks/use-search-timeoffappr";
+import { useCurrentUser } from "@/features/user/hooks/use-current-user";
+import { useLogout } from "@/features/user/hooks/use-logout";
 import clsx from "clsx";
 import {
   Building,
+  CheckCircle,
   DoorClosed,
   Home,
   LucideIcon,
@@ -24,6 +27,7 @@ type Menu = {
   icon: LucideIcon;
   path: string;
   totalData?: number;
+  permission?: string;
 };
 
 export default function Sidebar() {
@@ -33,43 +37,83 @@ export default function Sidebar() {
     status: "PENDING",
   });
 
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+  const currentUser = useCurrentUser();
+  const userPermissions = useMemo(
+    () => new Set(currentUser?.permissions?.map((p) => p.name) ?? []),
+    [currentUser],
+  );
+
   const pathname = usePathname();
   const [key, setKey] = useState("");
 
   const isActive = (url: string) =>
     pathname === url || pathname.startsWith(url + "/");
 
-  // ✅ bikin reactive pakai useMemo
   const menuItems: Menu[] = useMemo(
     () => [
       { label: "Dashboard", icon: Home, path: "/dashboard" },
-      { label: "Perusahaan", icon: Building, path: "/companies" },
-      { label: "Data karyawan", icon: Users, path: "/employees" },
+      {
+        label: "Perusahaan",
+        icon: Building,
+        path: "/companies",
+        permission: "COMPANIES",
+      },
+      {
+        label: "Data karyawan",
+        icon: Users,
+        path: "/employees",
+        permission: "EMPLOYEES",
+      },
       {
         label: "Izin & cuti",
         icon: NotebookPen,
         path: "/time-offs",
+        permission: "TIME_OFF_REQUESTS",
+      },
+      {
+        label: "Persetujuan Izin & cuti",
+        icon: CheckCircle,
+        path: "/time-off-approvals",
         totalData: timeOffApproval?.data?.length ?? 0,
+        permission: "TIME_OFF_APPROVALS",
       },
       // { label: "Kehadiran", icon: CalendarHeart, path: "/attendances" },
-      { label: "Kunjungan", icon: MapPinned, path: "/visits" },
+      {
+        label: "Kunjungan",
+        icon: MapPinned,
+        path: "/visits",
+        permission: "VISITS",
+      },
       {
         label: "Sanksi / pelanggaran",
         icon: TriangleAlert,
         path: "/employee-sanctions",
+        permission: "EMPLOYEE_SANCTIONS",
       },
-      { label: "User Menajemen", icon: UserLock, path: "/users" },
-      { label: "Pengaturan", icon: Settings2, path: "/settings" },
+      {
+        label: "User Menajemen",
+        icon: UserLock,
+        path: "/users",
+        permission: "USERS",
+      },
+      {
+        label: "Pengaturan",
+        icon: Settings2,
+        path: "/settings",
+        permission: "SETTINGS",
+      },
     ],
     [timeOffApproval],
   );
 
-  // ✅ filter tanpa useEffect (lebih clean)
   const filteredMenu = useMemo(() => {
-    return menuItems.filter((el) =>
-      el.label.toLowerCase().includes(key.toLowerCase()),
-    );
-  }, [key, menuItems]);
+    return menuItems.filter((el) => {
+      if (!el.label.toLowerCase().includes(key.toLowerCase())) return false;
+      if (!el.permission) return true;
+      return userPermissions.has(el.permission);
+    });
+  }, [key, menuItems, userPermissions]);
 
   return (
     <div className="py-6">
@@ -128,10 +172,16 @@ export default function Sidebar() {
       <div className="border-t my-3 mx-6 md:mx-10" />
 
       {/* Logout */}
-      <div className="flex items-center gap-4 p-4 rounded-2xl cursor-pointer hover:bg-zinc-50 transition-all mx-6 md:mx-10">
+      <button
+        onClick={() => logout()}
+        disabled={isLoggingOut}
+        className="flex items-center gap-4 p-4 rounded-2xl cursor-pointer hover:bg-zinc-50 transition-all mx-6 md:mx-10 w-[calc(100%-3rem)] disabled:opacity-50"
+      >
         <DoorClosed className="w-5 h-5 text-red-500" />
-        <span className="text-base text-red-500">Logout</span>
-      </div>
+        <span className="text-base text-red-500">
+          {isLoggingOut ? "Keluar..." : "Logout"}
+        </span>
+      </button>
     </div>
   );
 }

@@ -6,13 +6,12 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function TimeOffLayout({ children }: Props) {
-  const tabs: Tab[] = [
-    { label: "Pengajuan Cuti", path: "/time-offs" },
+const tabs: Tab[] = [
+  { label: "User", path: "/users" },
+  { label: "Hak Akses", path: "/users/permissions" },
+];
 
-    { label: "Jenis Cuti", path: "/time-offs/types" },
-  ];
-
+export default function CompanyLayout({ children }: Props) {
   return (
     <div>
       <Tabs tabs={tabs} />

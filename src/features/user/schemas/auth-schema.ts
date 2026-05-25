@@ -11,6 +11,7 @@ export const UserSchema = z.object({
   email: z.string().email(),
   email_verified: z.boolean().optional(),
   roles: z.array(RoleSchema).optional(),
+  permissions: z.array(z.object({ name: z.string() })).optional(),
   company_id: z.string(),
   created_at: z.number(),
   updated_at: z.number(),
@@ -36,6 +37,7 @@ export const UpdateUserRequestSchema = z.object({
   name: z.string().min(1, "Nama tidak boleh kosong").optional(),
   email: z.string().email("Email tidak valid").optional(),
   email_verified: z.boolean().optional(),
+  role_ids: z.array(z.string()).optional(),
 });
 
 export const ResetPasswordRequestSchema = z.object({

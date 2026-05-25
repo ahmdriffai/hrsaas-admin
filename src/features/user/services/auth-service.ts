@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
 import { ResponseData } from "@/lib/response";
-import { Auth, AuthSchema } from "../schemas/auth-schema";
+import { Auth } from "../schemas/auth-schema";
 
 export const logout = async (): Promise<void> => {
   await api.delete("/users/_logout");
@@ -17,7 +17,7 @@ export const login = async (
     throw new Error(response.data.error || "Login failed");
   }
 
-  const authData = AuthSchema.parse(response.data.data); // Validate the response data against the schema
+  const authData = response.data.data; // Validate the response data against the schema
 
   return { ...response.data, data: authData }; // Return the validated data
 };
