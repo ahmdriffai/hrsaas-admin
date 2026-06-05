@@ -55,8 +55,20 @@ export const SearchEmployeeRequestSchema = z.object({
   size: z.number().optional(),
 });
 
+export const UpdateEmployeeSchema = z.object({
+  fullname: z.string().min(2).max(100).optional(),
+  birth_place: z.string().max(100).optional(),
+  birth_date: z.string().optional(),
+  blood_type: z.string().max(10).optional(),
+  marital_status: z.string().max(20).optional(),
+  religion: z.string().max(50).optional(),
+  phone: z.string().max(20).optional(),
+  timezone: z.string().max(10).optional(),
+});
+
 export type Employee = z.infer<typeof EmployeeSchema>;
 export type CreateEmployee = z.infer<typeof CreateEmployeeScheme>;
+export type UpdateEmployee = z.infer<typeof UpdateEmployeeSchema>;
 export type SearchEmployeeRequest = z.infer<typeof SearchEmployeeRequestSchema>;
 export type EmployeeContact = z.infer<typeof EmployeeContractSchema>;
 export type position = z.infer<typeof PositionSchema>;

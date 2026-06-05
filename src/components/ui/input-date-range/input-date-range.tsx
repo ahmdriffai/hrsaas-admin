@@ -6,6 +6,7 @@ import DateRangePicker, {
 import Button from "@/components/ui/button/button";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Input from "../input/input";
 
 interface Props {
@@ -26,8 +27,9 @@ export default function InputDateRange({
   className,
 }: Props) {
   const [open, setOpen] = useState(false);
-  const [alignRight, setAlignRight] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const formatDate = (date?: Date | null) => {
     if (!date) return "";
@@ -36,7 +38,10 @@ export default function InputDateRange({
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (!ref.current?.contains(e.target as Node)) {
+      if (
+        !triggerRef.current?.contains(e.target as Node) &&
+        !dropdownRef.current?.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -45,15 +50,21 @@ export default function InputDateRange({
   }, []);
 
   function handleToggle() {
-    if (ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      setAlignRight(window.innerWidth - rect.left < DESKTOP_PICKER_WIDTH);
-    }
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    const alignRight = window.innerWidth - rect.left < DESKTOP_PICKER_WIDTH;
+    setDropdownStyle({
+      position: "fixed",
+      top: rect.bottom + 8,
+      ...(alignRight
+        ? { right: window.innerWidth - rect.right }
+        : { left: rect.left }),
+    });
     setOpen((prev) => !prev);
   }
 
   return (
-    <div ref={ref} className={`relative ${className ?? ""}`}>
+    <div ref={triggerRef} className={`relative ${className ?? ""}`}>
       <div className="flex gap-2">
         <Input
           label={labelStart ?? "Start"}
@@ -71,36 +82,38 @@ export default function InputDateRange({
         />
       </div>
 
-      {open && (
-        <div
-          className={`absolute z-50 mt-2 w-fit max-w-[calc(100vw-2rem)] md:min-w-150 overflow-x-auto rounded-2xl shadow-xl bg-white ${
-            alignRight ? "right-0" : "left-0"
-          }`}
-        >
-          <DateRangePicker
-            value={value}
-            onChange={(range) => {
-              onChange?.(range);
-              if (range.start && range.end) {
-                setOpen(false);
-              }
-            }}
-          />
-          <div className="px-4 pb-4 flex justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                onChange?.({ start: null, end: null });
-                setOpen(false);
+      {open &&
+        createPortal(
+          <div
+            ref={dropdownRef}
+            style={dropdownStyle}
+            className="z-[9999] w-fit max-w-[calc(100vw-2rem)] overflow-x-auto rounded-2xl shadow-xl bg-white"
+          >
+            <DateRangePicker
+              value={value}
+              onChange={(range) => {
+                onChange?.(range);
+                if (range.start && range.end) {
+                  setOpen(false);
+                }
               }}
-            >
-              Kosongkan tanggal
-            </Button>
-          </div>
-        </div>
-      )}
+            />
+            <div className="px-4 pb-4 flex justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  onChange?.({ start: null, end: null });
+                  setOpen(false);
+                }}
+              >
+                Kosongkan tanggal
+              </Button>
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

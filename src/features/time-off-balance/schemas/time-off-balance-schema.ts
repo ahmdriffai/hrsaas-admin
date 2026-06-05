@@ -37,7 +37,6 @@ export const CreateTimeOffBalanceSchema = z.object({
   period_year: z.coerce.number().min(2000),
   entitled_days: z.coerce.number().min(0, "Hak cuti minimal 0"),
   used_days: z.coerce.number().min(0, "Cuti terpakai minimal 0"),
-  remaining_days: z.coerce.number().min(0, "Sisa cuti minimal 0"),
 });
 
 export const SearchTimeOffBalanceSchema = z.object({

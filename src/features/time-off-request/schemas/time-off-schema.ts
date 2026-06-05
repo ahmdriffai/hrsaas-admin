@@ -19,6 +19,7 @@ export const TimeOffRequestSchema = z.object({
   requested_days: z.number(),
   request_reason: z.string(),
   request_status: z.string(),
+  file_url: z.string().nullable().optional(),
   created_at: z.number(),
   employee: EmployeeSchema,
   time_off_type: TimeOffTypeSchema,
@@ -35,5 +36,15 @@ export const SearchTimeOffRequestSchema = z.object({
   size: z.number().optional(),
 });
 
+export const CreateTimeOffRequestSchema = z.object({
+  employee_id: z.string().min(1, "Karyawan wajib dipilih"),
+  time_off_type_id: z.string().min(1, "Jenis cuti wajib dipilih"),
+  start_date: z.string().min(1, "Tanggal mulai wajib diisi"),
+  end_date: z.string().min(1, "Tanggal selesai wajib diisi"),
+  request_reason: z.string().min(1, "Alasan wajib diisi"),
+  file_url: z.string().optional(),
+});
+
 export type SearchTimeOffRequest = z.infer<typeof SearchTimeOffRequestSchema>;
 export type TimeOffRequest = z.infer<typeof TimeOffRequestSchema>;
+export type CreateTimeOffRequest = z.infer<typeof CreateTimeOffRequestSchema>;

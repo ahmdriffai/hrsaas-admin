@@ -7,7 +7,7 @@ import Table from "@/components/ui/table/table";
 import { PageSelector } from "@/components/shared/page-selector/page-selector";
 import Badge from "@/components/ui/badge/badge";
 import toIDDate from "@/lib/utils";
-import { Check, Printer } from "lucide-react";
+import { Check, FileText, Printer, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSearchTimeOffReq } from "../hooks/use-search-timeoffreq";
 import { SearchTimeOffRequest } from "../schemas/time-off-schema";
@@ -105,17 +105,36 @@ export default function ListTimeOffRequest({ search }: Props): React.ReactNode {
             ),
           },
           {
+            header: "File",
+            accessor: (row) =>
+              row.file_url ? (
+                <a
+                  href={row.file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-blue-600 hover:underline text-sm whitespace-nowrap"
+                >
+                  <FileText size={14} />
+                  Lihat File
+                </a>
+              ) : (
+                <span className="text-zinc-400 text-sm">-</span>
+              ),
+          },
+          {
             header: "Approval",
             accessor: (row) => (
-              <div className="min-w-30">
+              <div className="flex flex-col gap-1 min-w-40">
                 {row.approvals.map((item, i) => (
-                  <div key={i} className="flex">
-                    <p className="font-medium flex items-center gap-2">
-                      {item.employee_name}
-                      {item.status === "APPROVED" && (
-                        <Check size={13} className="text-green-600" />
-                      )}
-                    </p>
+                  <div key={i} className="flex items-center gap-2">
+                    <span className="text-sm">{item.employee_name}</span>
+                    {item.status === "APPROVED" ? (
+                      <Check size={13} className="text-green-600 shrink-0" />
+                    ) : item.status === "REJECTED" ? (
+                      <X size={13} className="text-red-500 shrink-0" />
+                    ) : (
+                      <span className="text-xs text-zinc-400">Menunggu</span>
+                    )}
                   </div>
                 ))}
               </div>
