@@ -31,7 +31,6 @@ export default function FormTimeOffBalance({ employeeId, isOpen, onClose }: Prop
       period_year: currentYear,
       entitled_days: 0,
       used_days: 0,
-      remaining_days: 0,
     },
   });
 
@@ -106,7 +105,7 @@ export default function FormTimeOffBalance({ employeeId, isOpen, onClose }: Prop
           />
         </FormField>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <FormField label="Hak Cuti (hari)" required>
             <Input
               label="Hak Cuti"
@@ -124,16 +123,6 @@ export default function FormTimeOffBalance({ employeeId, isOpen, onClose }: Prop
               min={0}
               {...form.register("used_days")}
               error={form.formState.errors.used_days?.message}
-            />
-          </FormField>
-
-          <FormField label="Sisa (hari)" required>
-            <Input
-              label="Sisa"
-              type="number"
-              min={0}
-              {...form.register("remaining_days")}
-              error={form.formState.errors.remaining_days?.message}
             />
           </FormField>
         </div>

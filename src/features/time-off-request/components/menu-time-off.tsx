@@ -8,6 +8,7 @@ import { mapToOptions } from "@/lib/utils";
 import { CalendarDays, List } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { CreateTimeOffForm } from "./create-time-off";
 import { SearchTimeOffRequest } from "../schemas/time-off-schema";
 
 interface Props {
@@ -96,9 +97,12 @@ export default function MenuTimeOffRequest({
           </button>
         </div>
 
-        <Button variant="outline" size="sm">
-          Download
-        </Button>
+        <div className="flex items-center gap-2">
+          <CreateTimeOffForm />
+          <Button variant="outline" size="sm">
+            Download
+          </Button>
+        </div>
       </div>
 
       <div className="flex gap-5 flex-wrap">
