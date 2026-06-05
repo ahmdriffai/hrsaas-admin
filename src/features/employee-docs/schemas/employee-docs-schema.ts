@@ -4,7 +4,9 @@ export const EmployeeDocumentSchema = z.object({
   id: z.string(),
   employee_id: z.string(),
   employee_name: z.string(),
+  doc_type: z.string(),
   doc_name: z.string(),
+  doc_number: z.string(),
   file_url: z.string(),
   issued: z.number(),
   created_at: z.number(),
@@ -13,6 +15,7 @@ export const EmployeeDocumentSchema = z.object({
 
 export const CreateEmployeeDocumentSchema = z.object({
   employee_id: z.string().min(1),
+  doc_type: z.string().min(1, "Tipe dokumen wajib diisi"),
   doc_name: z.string().min(1, "Nama dokumen wajib diisi"),
   doc_number: z.string().min(1, "Nomor dokumen wajib diisi"),
   issued: z.string().min(1, "Tanggal terbit wajib diisi"),

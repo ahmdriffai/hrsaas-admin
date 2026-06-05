@@ -40,9 +40,23 @@ export default function ListEmployeeDocs({ search }: Props) {
         keyExtractor={(row) => row.id}
         columns={[
           {
+            header: "Tipe",
+            accessor: (row) => (
+              <span className="text-xs font-medium bg-zinc-100 px-2 py-1 rounded">
+                {row.doc_type}
+              </span>
+            ),
+          },
+          {
             header: "Nama Dokumen",
             accessor: (row) => (
               <span className="font-medium">{row.doc_name}</span>
+            ),
+          },
+          {
+            header: "Nomor Dokumen",
+            accessor: (row) => (
+              <span className="text-sm text-zinc-600">{row.doc_number}</span>
             ),
           },
           {

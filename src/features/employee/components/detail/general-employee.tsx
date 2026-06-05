@@ -1,31 +1,10 @@
 "use client";
 import EditableField from "@/components/shared/editable-field/editable-field";
+import { blood_type, maritalStatus, religion } from "@/lib/data";
 import toIDDate, { diffDateDetail } from "@/lib/utils";
 import React from "react";
 import { useDetailEmployee } from "../../hooks/use-detail-employee";
 import { useUpdateEmployee } from "../../hooks/use-update-employee";
-
-const BLOOD_TYPE_OPTIONS = [
-  { label: "A", value: "A" },
-  { label: "B", value: "B" },
-  { label: "AB", value: "AB" },
-  { label: "O", value: "O" },
-];
-
-const MARITAL_STATUS_OPTIONS = [
-  { label: "Belum Menikah", value: "Belum Menikah" },
-  { label: "Menikah", value: "Menikah" },
-  { label: "Cerai", value: "Cerai" },
-];
-
-const RELIGION_OPTIONS = [
-  { label: "Islam", value: "Islam" },
-  { label: "Kristen", value: "Kristen" },
-  { label: "Katolik", value: "Katolik" },
-  { label: "Hindu", value: "Hindu" },
-  { label: "Buddha", value: "Buddha" },
-  { label: "Konghucu", value: "Konghucu" },
-];
 
 interface Props {
   id: string;
@@ -82,7 +61,7 @@ export default function GeneralEmployee({ id }: Props): React.ReactNode {
             type="select"
             label="Status Perkawinan"
             value={employee?.marital_status}
-            options={MARITAL_STATUS_OPTIONS}
+            options={maritalStatus}
             hint="Pastikan status perkawinan sesuai"
             onSave={(value) => updateEmployee({ marital_status: value })}
           />
@@ -90,7 +69,7 @@ export default function GeneralEmployee({ id }: Props): React.ReactNode {
             type="select"
             label="Golongan darah"
             value={employee?.blood_type}
-            options={BLOOD_TYPE_OPTIONS}
+            options={blood_type}
             hint="Pastikan golongan darah sesuai"
             onSave={(value) => updateEmployee({ blood_type: value })}
           />
@@ -106,7 +85,7 @@ export default function GeneralEmployee({ id }: Props): React.ReactNode {
             type="select"
             label="Agama"
             value={employee?.religion}
-            options={RELIGION_OPTIONS}
+            options={religion}
             hint="Pastikan agama sesuai"
             onSave={(value) => updateEmployee({ religion: value })}
           />

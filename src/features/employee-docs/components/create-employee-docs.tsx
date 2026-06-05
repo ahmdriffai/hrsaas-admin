@@ -16,9 +16,9 @@ import {
   CreateEmployeeDocumentSchema,
 } from "../schemas/employee-docs-schema";
 
-const DOC_NAME_OPTIONS = [
-  { label: "Surat Keputusan", value: "Surat Keputusan" },
-  { label: "Dokumen Kontrak", value: "Dokumen Kontrak" },
+const DOC_TYPE_OPTIONS = [
+  { label: "Surat Keputusan", value: "SK" },
+  { label: "Dokumen Kontrak", value: "Kontrak" },
   { label: "KTP", value: "KTP" },
   { label: "SIM", value: "SIM" },
   { label: "Paspor", value: "Paspor" },
@@ -26,8 +26,16 @@ const DOC_NAME_OPTIONS = [
   { label: "SKCK", value: "SKCK" },
   { label: "NPWP", value: "NPWP" },
   { label: "Kartu Keluarga", value: "KK" },
-  { label: "Lainnya", value: "Lainya" },
+  { label: "Lainnya", value: "Lainnya" },
 ];
+
+const EMPTY_VALUES = {
+  doc_type: "",
+  doc_name: "",
+  doc_number: "",
+  issued: "",
+  file_url: "",
+};
 
 interface Props {
   employeeId: string;
@@ -37,24 +45,12 @@ export function CreateEmployeeDocsForm({ employeeId }: Props) {
   const [open, setOpen] = useState(false);
 
   const form = useZodForm(CreateEmployeeDocumentSchema, {
-    defaultValues: {
-      employee_id: employeeId,
-      doc_name: "",
-      doc_number: "",
-      issued: "",
-      file_url: "",
-    },
+    defaultValues: { employee_id: employeeId, ...EMPTY_VALUES },
   });
 
   const mutation = useCreateEmployeeDocument(() => {
     setOpen(false);
-    form.reset({
-      employee_id: employeeId,
-      doc_name: "",
-      doc_number: "",
-      issued: "",
-      file_url: "",
-    });
+    form.reset({ employee_id: employeeId, ...EMPTY_VALUES });
   });
 
   const onSubmit = (data: CreateEmployeeDocument) => {
@@ -101,19 +97,28 @@ export function CreateEmployeeDocsForm({ employeeId }: Props) {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4"
         >
-          <FormField label="Nama Dokumen" required>
+          <FormField label="Tipe Dokumen" required>
             <Controller
-              name="doc_name"
+              name="doc_type"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Select
-                  label="Nama Dokumen"
-                  options={DOC_NAME_OPTIONS}
+                  label="Tipe Dokumen"
+                  options={DOC_TYPE_OPTIONS}
                   value={field.value}
                   onChange={field.onChange}
                   error={fieldState.error?.message}
                 />
               )}
+            />
+          </FormField>
+
+          <FormField label="Nama Dokumen" required>
+            <Input
+              label="Nama Dokumen"
+              type="text"
+              {...form.register("doc_name")}
+              error={form.formState.errors.doc_name?.message}
             />
           </FormField>
 
