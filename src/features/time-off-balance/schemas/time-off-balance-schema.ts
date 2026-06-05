@@ -26,6 +26,7 @@ export const TimeOffBalanceSchema = z.object({
   period_year: z.number(),
   entitled_days: z.number(),
   used_days: z.number(),
+  remaining_days: z.number(),
   employee: TimeOffBalanceEmployeeSchema,
   time_off_type: TimeOffTypeSchema,
 });
