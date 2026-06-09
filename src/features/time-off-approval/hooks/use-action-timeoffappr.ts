@@ -17,7 +17,7 @@ export const useActionTimeOffApproval = (id: string) => {
         exact: false,
       });
       toast.success("Berhasil.");
-      router.push("/time-offs/approvals"); // Redirect ke dashboard atau halaman utama
+      router.push("/time-off-approvals"); // Redirect ke dashboard atau halaman utama
     },
     onError: (error) => {
       toast.error(error.message);

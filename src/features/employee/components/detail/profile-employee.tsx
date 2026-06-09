@@ -24,7 +24,7 @@ export default function ProfileEmployee({ id }: Props): React.ReactNode {
         <h2 className="font-semibold text-2xl text-center">
           {employee?.fullname}
         </h2>
-        <p>{employee?.contract?.[0].position.name}</p>
+        <p>{employee?.contracts?.[0]?.position.name}</p>
       </div>
       <div className="mt-6 space-y-5">
         <div className="flex gap-2 items-center">

@@ -56,8 +56,8 @@ export default function ListTimeOffRequest({ search }: Props): React.ReactNode {
                 <div className="flex flex-col">
                   <span className="font-medium ">{row.employee.fullname}</span>
                   <span className="text-xs font-light text-zinc-400">
-                    {row.employee.contract?.[0].position.name} -
-                    {row.employee.contract?.[0].division.name}
+                    {row.employee.contracts?.[0].position.name} -
+                    {row.employee.contracts?.[0].division.name}
                   </span>
                 </div>
               </div>
