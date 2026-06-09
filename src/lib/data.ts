@@ -1,5 +1,10 @@
 import { Option } from "@/components/ui/select/select";
 
+export const gender: Option[] = [
+  { value: "Laki-laki", label: "Laki-laki" },
+  { value: "Perempuan", label: "Perempuan" },
+];
+
 export const religion: Option[] = [
   { value: "Islam", label: "Islam" },
   { value: "Hindu", label: "Hindu" },

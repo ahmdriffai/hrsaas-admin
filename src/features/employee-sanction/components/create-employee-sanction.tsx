@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/button/button";
+import FileUploader from "@/components/ui/file-uploader/file-uploader";
 import FormField from "@/components/ui/form/form-field";
 import InputDate from "@/components/ui/input-date/input-date";
 import Input from "@/components/ui/input/input";
@@ -146,12 +147,17 @@ export function CreateEmployeeSanctionForm() {
             />
           </FormField>
 
-          <FormField label="URL Dokumen">
-            <Input
-              label="URL dokumen"
-              type="text"
-              {...form.register("document_url")}
-              error={form.formState.errors.document_url?.message}
+          <FormField label="Dokumen">
+            <Controller
+              name="document_url"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <FileUploader
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={fieldState.error?.message}
+                />
+              )}
             />
           </FormField>
 

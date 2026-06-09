@@ -1,6 +1,6 @@
 "use client";
 import EditableField from "@/components/shared/editable-field/editable-field";
-import { blood_type, maritalStatus, religion } from "@/lib/data";
+import { blood_type, gender, maritalStatus, religion } from "@/lib/data";
 import toIDDate, { diffDateDetail } from "@/lib/utils";
 import React from "react";
 import { useDetailEmployee } from "../../hooks/use-detail-employee";
@@ -39,6 +39,22 @@ export default function GeneralEmployee({ id }: Props): React.ReactNode {
           hint="Pastikan nama lengkap sesuai"
           onSave={(value) => updateEmployee({ fullname: value })}
         />
+        <div className="grid grid-cols-2 gap-5">
+          <EditableField
+            type="select"
+            label="Jenis Kelamin"
+            value={employee?.gender}
+            options={gender}
+            hint="Pastikan jenis kelamin sesuai"
+            onSave={(value) => updateEmployee({ gender: value })}
+          />
+          <EditableField
+            label="NIK / Nomor Identitas"
+            value={employee?.identity_number}
+            hint="Pastikan nomor identitas sesuai"
+            onSave={(value) => updateEmployee({ identity_number: value })}
+          />
+        </div>
         <div className="grid grid-cols-2 gap-5">
           <EditableField
             label="Tempat Lahir"
@@ -88,6 +104,20 @@ export default function GeneralEmployee({ id }: Props): React.ReactNode {
             options={religion}
             hint="Pastikan agama sesuai"
             onSave={(value) => updateEmployee({ religion: value })}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-5">
+          <EditableField
+            label="Alamat"
+            value={employee?.address}
+            hint="Pastikan alamat sesuai"
+            onSave={(value) => updateEmployee({ address: value })}
+          />
+          <EditableField
+            label="Kota"
+            value={employee?.city}
+            hint="Pastikan kota sesuai"
+            onSave={(value) => updateEmployee({ city: value })}
           />
         </div>
       </div>
