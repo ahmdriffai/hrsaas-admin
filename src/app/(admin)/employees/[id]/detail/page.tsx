@@ -1,4 +1,4 @@
-import GeneralEmployee from "@/features/employee/components/detail/general-employee";
+import ProfileEmployee from "@/features/employee/components/detail/profile-employee";
 
 type Props = {
   params: Promise<{
@@ -9,9 +9,5 @@ type Props = {
 export default async function DetailEmployeePage({ params }: Props) {
   const { id } = await params;
 
-  return (
-    <div>
-      <GeneralEmployee id={id} />
-    </div>
-  );
+  return <ProfileEmployee id={id} />;
 }
