@@ -117,9 +117,9 @@ export default function Sidebar() {
 
   return (
     <div className="py-6">
-      <h1 className="text-2xl font-medium mb-3 tracking-wide px-6 md:px-10">
+      {/* <h1 className="text-2xl font-medium mb-3 tracking-wide px-6 md:px-10">
         Menu admin
-      </h1>
+      </h1> */}
 
       {/* Search */}
       <div className="px-6 md:px-8 mb-6">
