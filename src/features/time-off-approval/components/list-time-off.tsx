@@ -16,6 +16,7 @@ import {
   SearchTimeOffApproval,
   TimeOffApproval,
 } from "../schemas/time-off-approval-schema";
+import ActionTimeOffAppr from "./action-time-offappr";
 
 interface Props {
   search: SearchTimeOffApproval;
@@ -345,6 +346,7 @@ export default function ListTimeOffApproval({
                 >
                   Detail
                 </Button>
+                <ActionTimeOffAppr id={row.id} />
               </div>
             ),
             className: "text-right",
