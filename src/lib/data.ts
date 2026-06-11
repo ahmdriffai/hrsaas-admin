@@ -30,6 +30,8 @@ export const maritalStatus: Option[] = [
 ];
 
 export const contractType: Option[] = [
+  { value: "Direksi", label: "Direksi" },
+  { value: "Komisaris", label: "Komisaris" },
   { value: "Tetap", label: "Karyawan Tetap" },
   { value: "Kontrak", label: "Karyawan Kontrak" },
   { value: "Outsourching", label: "Karyawan Outsourching" },

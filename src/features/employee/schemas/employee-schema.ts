@@ -66,6 +66,7 @@ export const EmployeeSchema = z.object({
   employee_educations: z.array(EmployeeEducationSchema).optional(),
   employee_trainings: z.array(EmployeeTrainingSchema).optional(),
   user: UserSchema,
+  is_active: z.boolean().optional(),
   created_at: z.number().int().optional(),
   updated_at: z.number().int().optional(),
 });
@@ -108,6 +109,7 @@ export const UpdateEmployeeSchema = z.object({
   address: z.string().optional(),
   city: z.string().optional(),
   timezone: z.string().max(10).optional(),
+  is_active: z.boolean().optional(),
 });
 
 export type Employee = z.infer<typeof EmployeeSchema>;

@@ -1,6 +1,8 @@
 "use client";
+"use client";
 import EditableField from "@/components/shared/editable-field/editable-field";
 import ImageViewer from "@/components/ui/image-viewer/image-viewer";
+import Switch from "@/components/ui/switch/switch";
 import { blood_type, gender, maritalStatus, religion } from "@/lib/data";
 import toIDDate, { diffDateDetail } from "@/lib/utils";
 import { Globe, Mail, Phone } from "lucide-react";
@@ -14,11 +16,12 @@ interface Props {
 
 export default function ProfileEmployee({ id }: Props): React.ReactNode {
   const { data } = useDetailEmployee(id);
-  const { mutate: updateEmployee } = useUpdateEmployee(id);
+  const { mutate: updateEmployee, isPending } = useUpdateEmployee(id);
   const employee = data?.data;
   const birthDate = employee?.birth_date
     ? new Date(employee.birth_date)
     : undefined;
+  const isActive = employee?.is_active ?? true;
 
   return (
     <div className="flex flex-col md:flex-row gap-4">
@@ -35,6 +38,15 @@ export default function ProfileEmployee({ id }: Props): React.ReactNode {
             {employee?.fullname}
           </h2>
           <p>{employee?.contracts?.[0]?.position.name}</p>
+          <span
+            className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+              isActive
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {isActive ? "Aktif" : "Nonaktif"}
+          </span>
         </div>
         <div className="mt-6 space-y-5">
           <div className="flex gap-2 items-center">
@@ -65,6 +77,12 @@ export default function ProfileEmployee({ id }: Props): React.ReactNode {
               )
             </span>
           </h2>
+          <Switch
+            checked={isActive}
+            onChange={(val) => updateEmployee({ is_active: val })}
+            disabled={isPending}
+            label={isActive ? "Aktif" : "Nonaktif"}
+          />
         </div>
         <div className="w-full py-5 space-y-5">
           <EditableField

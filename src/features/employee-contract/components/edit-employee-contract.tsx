@@ -12,11 +12,12 @@ import { useZodForm } from "@/hooks/use-zod-form";
 import { contractType } from "@/lib/data";
 import { mapToOptions } from "@/lib/utils";
 import { Controller } from "react-hook-form";
-import { useCreateEmployeeContract } from "../hooks/use-create-employee-contract";
+import { useUpdateEmployeeContract } from "../hooks/use-update-employee-contract";
 import {
-  CreateEmployeeContract,
-  CreateEmployeeContractSchema,
+  EmployeeContract,
   EMPLOYEE_STATUS_OPTIONS,
+  UpdateEmployeeContract,
+  UpdateEmployeeContractSchema,
 } from "../schemas/employee-contract-schema";
 
 const employeeStatusOptions = EMPLOYEE_STATUS_OPTIONS.map((s) => ({
@@ -25,22 +26,21 @@ const employeeStatusOptions = EMPLOYEE_STATUS_OPTIONS.map((s) => ({
 }));
 
 interface Props {
-  employeeId: string;
+  contract: EmployeeContract;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function FormEmployeeContract({ employeeId, isOpen, onClose }: Props) {
-  const form = useZodForm(CreateEmployeeContractSchema, {
-    defaultValues: {
-      employee_id: employeeId,
-      contract_type: "",
-      start_date: "",
-      end_date: "",
-      division_id: "",
-      position_id: "",
-      salary: 0,
-      employee_status: undefined,
+export default function EditEmployeeContract({ contract, isOpen, onClose }: Props) {
+  const form = useZodForm(UpdateEmployeeContractSchema, {
+    values: {
+      contract_type: contract.contract_type,
+      start_date: new Date(contract.start_date).toISOString(),
+      end_date: contract.end_date ? new Date(contract.end_date).toISOString() : "",
+      division_id: contract.division_id,
+      position_id: contract.position_id,
+      salary: contract.salary,
+      employee_status: contract.employee_status ?? undefined,
     },
   });
 
@@ -59,44 +59,34 @@ export default function FormEmployeeContract({ employeeId, isOpen, onClose }: Pr
     (p) => p.id,
   );
 
-  const handleClose = () => {
-    form.reset();
-    onClose();
-  };
+  const { mutate, isPending } = useUpdateEmployeeContract(onClose);
 
-  const { mutate, isPending } = useCreateEmployeeContract(handleClose);
-
-  const onSubmit = (data: CreateEmployeeContract) => {
+  const onSubmit = (data: UpdateEmployeeContract) => {
     mutate({
-      ...data,
-      employee_id: employeeId,
-      end_date: data.end_date || undefined,
+      id: contract.id,
+      data: { ...data, end_date: data.end_date || undefined },
     });
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={handleClose}
-      title="Tambah Kontrak Karyawan"
+      onClose={onClose}
+      title="Edit Kontrak Karyawan"
       maxWidth="md"
       footer={
         <>
-          <Button variant="outline" onClick={handleClose} disabled={isPending}>
+          <Button variant="outline" onClick={onClose} disabled={isPending}>
             Batal
           </Button>
-          <Button
-            type="submit"
-            form="form-employee-contract"
-            loading={isPending}
-          >
+          <Button type="submit" form="form-edit-employee-contract" loading={isPending}>
             Simpan
           </Button>
         </>
       }
     >
       <form
-        id="form-employee-contract"
+        id="form-edit-employee-contract"
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
       >
