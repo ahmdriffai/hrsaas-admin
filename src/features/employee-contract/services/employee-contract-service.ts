@@ -5,6 +5,7 @@ import {
   CreateEmployeeContract,
   EmployeeContract,
   SearchEmployeeContractRequest,
+  UpdateEmployeeContract,
 } from "../schemas/employee-contract-schema";
 
 export const getEmployeeContracts = async (
@@ -39,6 +40,27 @@ export const createEmployeeContract = async (
 
   if (response.status !== 200) {
     throw new Error(response.data.error || "Gagal membuat kontrak karyawan");
+  }
+
+  return response.data;
+};
+
+export const updateEmployeeContract = async (
+  id: string,
+  request: UpdateEmployeeContract,
+): Promise<ResponseData<EmployeeContract>> => {
+  const response = await api.put(`/employee-contracts/${id}`, {
+    ...request,
+    start_date: request.start_date
+      ? formatDate(new Date(request.start_date))
+      : undefined,
+    end_date: request.end_date
+      ? formatDate(new Date(request.end_date))
+      : undefined,
+  });
+
+  if (response.status !== 200) {
+    throw new Error(response.data.error || "Gagal mengubah kontrak karyawan");
   }
 
   return response.data;
