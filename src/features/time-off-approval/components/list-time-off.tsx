@@ -258,7 +258,7 @@ export default function ListTimeOffApproval({
           {
             header: "Karyawan",
             accessor: (row) => (
-              <div className="flex items-center justify-start gap-3 min-w-40">
+              <div className="flex items-center justify-start gap-3 min-w-30">
                 <div className="h-9 w-9 rounded-full bg-gray-200 flex justify-center items-center font-medium text-zinc-600">
                   {row.time_off_request.employee.fullname
                     .charAt(0)
@@ -339,6 +339,7 @@ export default function ListTimeOffApproval({
             header: "",
             accessor: (row) => (
               <div className="flex items-center gap-2 justify-end">
+                {row.status === "PENDING" && <ActionTimeOffAppr id={row.id} />}
                 <Button
                   variant="outline"
                   size="sm"
@@ -346,7 +347,6 @@ export default function ListTimeOffApproval({
                 >
                   Detail
                 </Button>
-                <ActionTimeOffAppr id={row.id} />
               </div>
             ),
             className: "text-right",
