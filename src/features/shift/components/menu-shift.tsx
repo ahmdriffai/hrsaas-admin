@@ -1,13 +1,12 @@
 "use client";
-
 import Button from "@/components/ui/button/button";
 import SearchForm from "@/components/ui/search-form/search-form";
 import { ChevronDown, Download, RotateCcw, Search, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { FormDivision } from "./form-position";
+import { FormShift } from "./form-shift";
 
-export default function MenuDivision(): React.ReactNode {
+export default function MenuShift() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -33,7 +32,9 @@ export default function MenuDivision(): React.ReactNode {
         role="button"
         tabIndex={0}
         onClick={() => setOpen((p) => !p)}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setOpen((p) => !p); }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") setOpen((p) => !p);
+        }}
         className="w-full flex items-center justify-between px-5 py-4 hover:bg-zinc-50 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-2.5">
@@ -62,12 +63,14 @@ export default function MenuDivision(): React.ReactNode {
             </span>
           )}
           <span onClick={(e) => e.stopPropagation()} className="flex gap-2">
-            <FormDivision />
+            <FormShift />
             <Button variant="outline" size="sm" prefixIcon={<Download size={16} />}>
               Download
             </Button>
           </span>
-          <ChevronDown className={`h-4 w-4 text-zinc-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+          <ChevronDown
+            className={`h-4 w-4 text-zinc-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          />
         </div>
       </div>
 

@@ -93,10 +93,12 @@ export default function MenuTimeOffRequest({ search, view }: Props): React.React
       </div>
 
       {/* Filter header – collapsible toggle */}
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setOpen((p) => !p)}
-        className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-zinc-50 transition-colors"
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setOpen((p) => !p); }}
+        className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-zinc-50 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-2.5">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-100">
@@ -125,7 +127,7 @@ export default function MenuTimeOffRequest({ search, view }: Props): React.React
           )}
           <ChevronDown className={`h-4 w-4 text-zinc-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
         </div>
-      </button>
+      </div>
 
       {/* Collapsible filter body */}
       {open && (

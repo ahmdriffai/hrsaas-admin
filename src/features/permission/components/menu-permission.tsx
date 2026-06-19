@@ -28,10 +28,12 @@ export default function MenuPermission(): React.ReactNode {
 
   return (
     <div className="mb-5 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setOpen((p) => !p)}
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-zinc-50 transition-colors"
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setOpen((p) => !p); }}
+        className="w-full flex items-center justify-between px-5 py-4 hover:bg-zinc-50 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100">
@@ -63,7 +65,7 @@ export default function MenuPermission(): React.ReactNode {
           </span>
           <ChevronDown className={`h-4 w-4 text-zinc-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
         </div>
-      </button>
+      </div>
 
       {open && (
         <div className="border-t border-zinc-100">

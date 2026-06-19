@@ -7,6 +7,7 @@ import clsx from "clsx";
 import {
   Building,
   CheckCircle,
+  Clock,
   DoorClosed,
   Home,
   LucideIcon,
@@ -102,6 +103,18 @@ export default function Sidebar() {
         icon: Settings2,
         path: "/settings",
         permission: "SETTINGS",
+      },
+      {
+        label: "Lokasi Kehadiran",
+        icon: Building,
+        path: "/office-locations",
+        permission: "OFFICE_LOCATIONS",
+      },
+      {
+        label: "Shift",
+        icon: Clock,
+        path: "/shifts",
+        permission: "SHIFTS",
       },
     ],
     [timeOffApproval],

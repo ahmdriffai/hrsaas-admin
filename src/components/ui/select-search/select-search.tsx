@@ -75,12 +75,7 @@ export default function SelectSearch({
         <div className="text-sm">{selected ? selected.label : ""}</div>
 
         {/* Label */}
-        <label
-          className={clsx(
-            "pointer-events-none absolute left-4 text-gray-500 transition-all duration-200",
-            isActive ? "top-2 text-xs" : "top-1/2 -translate-y-1/2 text-sm",
-          )}
-        >
+        <label className="pointer-events-none absolute left-4 top-2 text-xs text-gray-500">
           {label}
         </label>
 
