@@ -6,6 +6,7 @@ import { useLogout } from "@/features/user/hooks/use-logout";
 import clsx from "clsx";
 import {
   Building,
+  CalendarHeart,
   CheckCircle,
   Clock,
   DoorClosed,
@@ -79,7 +80,7 @@ export default function Sidebar() {
         totalData: timeOffApproval?.data?.length ?? 0,
         permission: "TIME_OFF_APPROVALS",
       },
-      // { label: "Kehadiran", icon: CalendarHeart, path: "/attendances" },
+      { label: "Kehadiran", icon: CalendarHeart, path: "/attendances", permission: "ATTENDANCES" },
       {
         label: "Kunjungan",
         icon: MapPinned,
