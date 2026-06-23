@@ -73,7 +73,7 @@ export function CreateEmployeeSanctionForm() {
         isOpen={open}
         onClose={() => setOpen(false)}
         title="Tambah Sanksi Karyawan"
-        maxWidth="md"
+        maxWidth="sm"
       >
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-3 space-y-5">
           <FormField label="Karyawan">

@@ -6,7 +6,9 @@ import { useLogout } from "@/features/user/hooks/use-logout";
 import clsx from "clsx";
 import {
   Building,
+  CalendarHeart,
   CheckCircle,
+  Clock,
   DoorClosed,
   Home,
   LucideIcon,
@@ -30,6 +32,11 @@ type Menu = {
   permission?: string;
 };
 
+type MenuCategory = {
+  title: string;
+  items: Menu[];
+};
+
 export default function Sidebar() {
   const { data: timeOffApproval } = useSearchTimeOffAppr({
     page: 1,
@@ -50,77 +57,60 @@ export default function Sidebar() {
   const isActive = (url: string) =>
     pathname === url || pathname.startsWith(url + "/");
 
-  const menuItems: Menu[] = useMemo(
+  const categories: MenuCategory[] = useMemo(
     () => [
-      { label: "Dashboard", icon: Home, path: "/dashboard" },
       {
-        label: "Perusahaan",
-        icon: Building,
-        path: "/companies",
-        permission: "COMPANIES",
+        title: "Utama",
+        items: [
+          { label: "Dashboard", icon: Home, path: "/dashboard" },
+        ],
       },
       {
-        label: "Data karyawan",
-        icon: Users,
-        path: "/employees",
-        permission: "EMPLOYEES",
+        title: "Karyawan",
+        items: [
+          { label: "Data Karyawan", icon: Users, path: "/employees", permission: "EMPLOYEES" },
+          { label: "Izin & Cuti", icon: NotebookPen, path: "/time-offs", permission: "TIME_OFF_REQUESTS" },
+          {
+            label: "Persetujuan Izin & Cuti",
+            icon: CheckCircle,
+            path: "/time-off-approvals",
+            totalData: timeOffApproval?.data?.length ?? 0,
+            permission: "TIME_OFF_APPROVALS",
+          },
+          { label: "Kehadiran", icon: CalendarHeart, path: "/attendances", permission: "ATTENDANCES" },
+          { label: "Kunjungan", icon: MapPinned, path: "/visits", permission: "VISITS" },
+          { label: "Sanksi / Pelanggaran", icon: TriangleAlert, path: "/employee-sanctions", permission: "EMPLOYEE_SANCTIONS" },
+        ],
       },
       {
-        label: "Izin & cuti",
-        icon: NotebookPen,
-        path: "/time-offs",
-        permission: "TIME_OFF_REQUESTS",
-      },
-      {
-        label: "Persetujuan Izin & cuti",
-        icon: CheckCircle,
-        path: "/time-off-approvals",
-        totalData: timeOffApproval?.data?.length ?? 0,
-        permission: "TIME_OFF_APPROVALS",
-      },
-      // { label: "Kehadiran", icon: CalendarHeart, path: "/attendances" },
-      {
-        label: "Kunjungan",
-        icon: MapPinned,
-        path: "/visits",
-        permission: "VISITS",
-      },
-      {
-        label: "Sanksi / pelanggaran",
-        icon: TriangleAlert,
-        path: "/employee-sanctions",
-        permission: "EMPLOYEE_SANCTIONS",
-      },
-      {
-        label: "User Menajemen",
-        icon: UserLock,
-        path: "/users",
-        permission: "USERS",
-      },
-      {
-        label: "Pengaturan",
-        icon: Settings2,
-        path: "/settings",
-        permission: "SETTINGS",
+        title: "Administrasi",
+        items: [
+          { label: "Perusahaan", icon: Building, path: "/companies", permission: "COMPANIES" },
+          { label: "Lokasi Kehadiran", icon: Building, path: "/office-locations", permission: "OFFICE_LOCATIONS" },
+          { label: "Shift", icon: Clock, path: "/shifts", permission: "SHIFTS" },
+          { label: "User Management", icon: UserLock, path: "/users", permission: "USERS" },
+          { label: "Pengaturan", icon: Settings2, path: "/settings", permission: "SETTINGS" },
+        ],
       },
     ],
     [timeOffApproval],
   );
 
-  const filteredMenu = useMemo(() => {
-    return menuItems.filter((el) => {
-      if (!el.label.toLowerCase().includes(key.toLowerCase())) return false;
-      if (!el.permission) return true;
-      return userPermissions.has(el.permission);
-    });
-  }, [key, menuItems, userPermissions]);
+  const filteredCategories = useMemo(() => {
+    return categories
+      .map((cat) => ({
+        ...cat,
+        items: cat.items.filter((item) => {
+          if (!item.label.toLowerCase().includes(key.toLowerCase())) return false;
+          if (!item.permission) return true;
+          return userPermissions.has(item.permission);
+        }),
+      }))
+      .filter((cat) => cat.items.length > 0);
+  }, [key, categories, userPermissions]);
 
   return (
     <div className="py-6">
-      {/* <h1 className="text-2xl font-medium mb-3 tracking-wide px-6 md:px-10">
-        Menu admin
-      </h1> */}
-
       {/* Search */}
       <div className="px-6 md:px-8 mb-6">
         <div className="flex items-center rounded-full border border-gray-300 px-4 py-4 focus-within:border-gray-400">
@@ -134,51 +124,59 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Menu */}
-      <div className="space-y-2 max-h-[500px] overflow-y-auto px-6 md:px-5">
-        {filteredMenu.map((item, index) => {
-          const Icon = item.icon;
-          const active = isActive(item.path);
+      {/* Menu dengan kategori */}
+      <div className="max-h-125 overflow-y-auto px-6 md:px-5 space-y-5">
+        {filteredCategories.map((cat) => (
+          <div key={cat.title}>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 px-2 mb-1">
+              {cat.title}
+            </p>
+            <div className="space-y-0.5">
+              {cat.items.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.path);
 
-          return (
-            <Link
-              href={item.path}
-              key={index}
-              className={clsx(
-                "flex items-center justify-between p-4 rounded-2xl transition-all duration-200",
-                active ? "bg-zinc-100 font-medium" : "hover:bg-zinc-50",
-              )}
-            >
-              <div className="flex items-center gap-4">
-                <Icon
-                  className="w-6 h-6 text-zinc-700"
-                  strokeWidth={active ? 2 : 1.5}
-                />
-                <span className="text-base text-zinc-800">{item.label}</span>
-              </div>
+                return (
+                  <Link
+                    href={item.path}
+                    key={item.path}
+                    className={clsx(
+                      "flex items-center justify-between p-3.5 rounded-2xl transition-all duration-200",
+                      active ? "bg-zinc-100 font-medium" : "hover:bg-zinc-50",
+                    )}
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <Icon
+                        className="w-4.5 h-4.5 text-zinc-600 shrink-0"
+                        strokeWidth={active ? 2.2 : 1.6}
+                      />
+                      <span className="text-sm text-zinc-800">{item.label}</span>
+                    </div>
 
-              {/* ✅ Badge fix */}
-              {item.totalData !== undefined && item.totalData > 0 && (
-                <Badge variant="danger" className="bg-destructive! text-white!">
-                  {item.totalData}
-                </Badge>
-              )}
-            </Link>
-          );
-        })}
+                    {item.totalData !== undefined && item.totalData > 0 && (
+                      <Badge variant="danger" className="bg-destructive! text-white!">
+                        {item.totalData}
+                      </Badge>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Divider */}
-      <div className="border-t my-3 mx-6 md:mx-10" />
+      <div className="border-t my-4 mx-6 md:mx-8" />
 
       {/* Logout */}
       <button
         onClick={() => logout()}
         disabled={isLoggingOut}
-        className="flex items-center gap-4 p-4 rounded-2xl cursor-pointer hover:bg-zinc-50 transition-all mx-6 md:mx-10 w-[calc(100%-3rem)] disabled:opacity-50"
+        className="flex items-center gap-3.5 p-3.5 rounded-2xl cursor-pointer hover:bg-zinc-50 transition-all mx-6 md:mx-5 w-[calc(100%-3rem)] disabled:opacity-50"
       >
-        <DoorClosed className="w-5 h-5 text-red-500" />
-        <span className="text-base text-red-500">
+        <DoorClosed className="w-4.5 h-4.5 text-red-500" />
+        <span className="text-sm text-red-500">
           {isLoggingOut ? "Keluar..." : "Logout"}
         </span>
       </button>
