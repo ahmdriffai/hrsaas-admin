@@ -1,6 +1,14 @@
 import z from "zod/v3";
 
-export const WEEKDAY_LABELS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+export const WEEKDAY_LABELS = [
+  "Senin",
+  "Selasa",
+  "Rabu",
+  "Kamis",
+  "Jumat",
+  "Sabtu",
+  "Minggu",
+];
 
 export const ShiftEmployeeSchema = z.object({
   id: z.string(),
@@ -35,14 +43,17 @@ export const ShiftDayRequestSchema = z.object({
 
 export const CreateShiftSchema = z.object({
   name: z.string().min(1, "Nama shift wajib diisi"),
-  late_tolerance: z.coerce.number().min(0, "Toleransi tidak boleh negatif").default(0),
+  late_tolerance: z.coerce
+    .number()
+    .min(0, "Toleransi tidak boleh negatif")
+    .default(0),
   shift_days: z.array(ShiftDayRequestSchema),
 });
 
 export const DEFAULT_SHIFT_DAYS = [1, 2, 3, 4, 5, 6, 7].map((weekday) => ({
   weekday,
   day_type: weekday <= 5 ? ("workday" as const) : ("offday" as const),
-  check_in: weekday <= 5 ? "08:00" : "",
+  check_in: weekday <= 5 ? "07:45" : "",
   check_out: weekday <= 5 ? "17:00" : "",
   break_start: weekday <= 5 ? "12:00" : "",
   break_end: weekday <= 5 ? "13:00" : "",

@@ -31,14 +31,21 @@ export function FormShift() {
     mutation.mutate(data, {
       onSuccess: () => {
         setOpen(false);
-        form.reset({ name: "", late_tolerance: 0, shift_days: DEFAULT_SHIFT_DAYS });
+        form.reset({
+          name: "",
+          late_tolerance: 0,
+          shift_days: DEFAULT_SHIFT_DAYS,
+        });
       },
     });
   };
 
   const toggleDayType = (index: number) => {
     const current = shiftDays[index].day_type;
-    form.setValue(`shift_days.${index}.day_type`, current === "workday" ? "offday" : "workday");
+    form.setValue(
+      `shift_days.${index}.day_type`,
+      current === "workday" ? "offday" : "workday",
+    );
   };
 
   return (
@@ -55,7 +62,11 @@ export function FormShift() {
         isOpen={open}
         onClose={() => {
           setOpen(false);
-          form.reset({ name: "", late_tolerance: 0, shift_days: DEFAULT_SHIFT_DAYS });
+          form.reset({
+            name: "",
+            late_tolerance: 0,
+            shift_days: DEFAULT_SHIFT_DAYS,
+          });
         }}
         title="Tambah Shift"
         maxWidth="xl"
@@ -101,7 +112,9 @@ export function FormShift() {
                     className={`grid grid-cols-[100px_90px_1fr_1fr_1fr_1fr_80px] gap-2 px-3 py-2 items-center border-b border-zinc-100 last:border-0 ${!isWorkday ? "bg-zinc-50" : ""}`}
                   >
                     {/* Hari */}
-                    <span className="text-sm font-medium">{WEEKDAY_LABELS[i]}</span>
+                    <span className="text-sm font-medium">
+                      {WEEKDAY_LABELS[i]}
+                    </span>
 
                     {/* Toggle workday/offday */}
                     <button
@@ -119,24 +132,28 @@ export function FormShift() {
                     {/* Time inputs — disabled when offday */}
                     <input
                       type="time"
+                      lang="id-ID"
                       disabled={!isWorkday}
                       {...form.register(`shift_days.${i}.check_in`)}
                       className="text-sm border border-zinc-200 rounded-lg px-2 py-1.5 outline-none focus:border-black disabled:bg-zinc-50 disabled:text-zinc-300 w-full"
                     />
                     <input
                       type="time"
+                      lang="id-ID"
                       disabled={!isWorkday}
                       {...form.register(`shift_days.${i}.check_out`)}
                       className="text-sm border border-zinc-200 rounded-lg px-2 py-1.5 outline-none focus:border-black disabled:bg-zinc-50 disabled:text-zinc-300 w-full"
                     />
                     <input
                       type="time"
+                      lang="id-ID"
                       disabled={!isWorkday}
                       {...form.register(`shift_days.${i}.break_start`)}
                       className="text-sm border border-zinc-200 rounded-lg px-2 py-1.5 outline-none focus:border-black disabled:bg-zinc-50 disabled:text-zinc-300 w-full"
                     />
                     <input
                       type="time"
+                      lang="id-ID"
                       disabled={!isWorkday}
                       {...form.register(`shift_days.${i}.break_end`)}
                       className="text-sm border border-zinc-200 rounded-lg px-2 py-1.5 outline-none focus:border-black disabled:bg-zinc-50 disabled:text-zinc-300 w-full"
